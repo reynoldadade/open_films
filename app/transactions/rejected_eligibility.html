@@ -1,0 +1,158 @@
+
+<div ng-controller="rejected_eligibility_Ctrl">
+    <div class="col-md-12">
+        <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+        <div class="w3-card-4 w3-margin">
+            <div class="w3-teal w3-bar">
+                <h3 class="w3-bar-item">Rejected Affordability</h3>
+                <div class="w3-bar-item w3-right"><input type="text" class="form-control" placeholder=search ng-model="search"></div>
+            </div>
+            <div style="overflow:auto; height: 500px;">
+                <table class="w3-table w3-striped" id="tableToExport">
+                    <!----end of table head---->
+                    <thead>
+                    <tr class="w3-light-grey">
+                        <th>Request ID</th>
+                        <th>
+                            <a ng-href="" ng-click="sortType = 'CreatedByDate'; sortReverse = !sortReverse">
+                                Date<span ng-show="sortType == 'CreatedByDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'CreatedByDate' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>Posted AT</th>
+                        <th>Employee ID</th>
+                        <th>Client Name</th>
+                        <th>
+                            <a ng-href="" ng-click="sortType = 'EmployerName'; sortReverse = !sortReverse">
+                                Employer<span ng-show="sortType == 'Employer' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'EmployerName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>TL Code</th>
+                        <th>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-file-excel" ng-json-export-excel data="details" report-fields="{CreatedByDate:'Date',EmployeeId:'Employee ID',
+                            Name:'Client Name',EmployerType:'Employer Type',UserId:'Posted By'}" filename=" 'payment-export' " separator="," class="css-class"><strong>Export to Excel</strong></i>
+                            </button>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <!--starting table body--->
+
+                    <tr ng-repeat="detail in details| orderBy:sortType:sortReverse|filter:search">
+                        <!---applying ng repeat to display sets of data in the api call---->
+                        <td class="w3-left-align">{{detail.Id}}</td>
+                        <td class="w3-left-align">{{detail.CreatedByDate|date:'longDate'}}</td>
+                        <td class="w3-left-align">{{detail.CreatedByDate|date:'shortTime'}}</td>
+                        <td class="w3-left-align">{{detail.EmployeeId}}</td>
+                        <td class="w3-left-align">{{detail.Name}}</td>
+                        <td class="w3-left-align">{{detail.EmployerType}}</td>
+                        <td class="w3-left-align">{{detail.UserId}}</td>
+                        <td>
+                            <button onclick="document.getElementById('approved_eligibility_modal').style.display='block'" ng-click="setSelected(detail);"
+                                    class="btn btn-success">
+                                View
+                            </button>
+                        </td>
+                    </tr><!--end of ng repeat---->
+                    </tbody><!--end of table body--->
+                </table><!---end of table-->
+
+                <div class="w3-center" ng-if="found">
+
+                    <br><br>
+                    <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
+                <div class="w3-center">
+                    <br><br>
+                    <p ng-if="empty">Tray is empty</p>
+                </div>
+            </div>
+
+
+
+
+            <div class="w3-container">
+                <!---modal container----->
+                <!---modal to display the currently selected row--->
+                <div id="approved_eligibility_modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-container w3-teal">
+                            <span onclick="document.getElementById('approved_eligibility_modal').style.display='none';document.getElementById('affordability_form').style.display='none';document.getElementById('footer_button').style.display='block';" class="w3-button w3-display-topright">&times;</span>
+                            <h2>Transaction Details</h2>
+                        </header><!---header for the modal----->
+
+                        <div class="w3-container" id="table">
+                            <!--container to hold table to display the currently selected client data--->
+                            <!---content to hold the selfie or image of the currently selected client--->
+
+                            <table class="w3-table w3-striped w3-border">
+                                <!--beginning of the table to diplay currently selected client data----->
+                                <tbody>
+                                <tr><td>STAFF ID: {{claim.EmployeeId}}</td><td>EMPLOYEE NAME: {{claim.Name}}</td></tr>
+                                <tr><td>POSTED AT: {{claim.CreatedByDate}}</td><td>STATUS: {{claim.Status}}</td></tr>
+                                <tr><td>EMPLOYER: {{claim.EmployerType}}</td><td>TL CODE: {{claim.UserId}}</td></tr>
+                                <tr><td>AFFORDABILITY:{{claim.Affordability}}</td><td>Message: {{claim.Note}}</td></tr>
+                                </tbody><!--end of table body--->
+                            </table><!---end of table --->
+
+                        </div><!---end of container--->
+
+
+
+                        <footer class="w3-container w3-teal">
+                            <!---modal footer--->
+                            <div class="w3-right w3-margin" id="footer_button">
+                                <button class="w3-btn w3-red" type="button" onclick="document.getElementById('affordability_form').style.display='block';
+                                document.getElementById('footer_button').style.display='none';">
+                                    RESPOND
+                                </button>
+                            </div>
+
+                            <div class="w3-content" id="affordability_form" style="display: none">
+                                <!--container to display the error message form--->
+                                <div class="w3-threequarter">
+                                    <form class="w3-container" ng-submit="respond()" name="affordForm">
+                                        <div class="w3-container" id="error-text">
+                                            <div class="w3-half w3-right w3-margin">
+
+                                                <br>
+
+                                                <label>Approve/Reject</label>
+                                                <select class="form-control" ng-model="selected_status">
+                                                    <option ng-repeat="status in statuses" value={{status}}>{{status|afford_filter}}</option>
+                                                </select>
+                                                <label>Affordability</label>
+                                                <input type="text" ng-model="affordability" class="form-control" placeholder="enter affordability here">
+                                                <br>
+                                                <textarea ng-model="note" class="form-control" placeholder="Message"></textarea>
+
+
+
+                                            </div>
+                                            <button class="w3-button w3-red w3-right w3-margin" type="submit" onclick="document.getElementById('approved_eligibility_modal').style.display='none'" ng-disabled="affordForm.$invalid">RESPOND</button>
+                                            <button class="w3-button w3-blue w3-right w3-margin" type="button" onclick="document.getElementById('affordability_form').style.display='none';document.getElementById('footer_button').style.display='block';">
+                                                BACK
+                                            </button>
+                                        </div>
+
+                                    </form><!--end of rejection form--->
+                                </div>
+                            </div><!--end of reject form --->
+
+                        </footer><!--end of modal footer-->
+
+
+
+                    </div>
+                </div>
+            </div><!---end of pending qc container--->
+
+
+        </div>
+    </div>
+</div>

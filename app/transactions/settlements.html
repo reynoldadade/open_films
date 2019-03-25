@@ -1,0 +1,115 @@
+<div ng-controller="settlement_Ctrl">
+ <div class="col-md-12">
+     <div class="w3-card-4 w3-margin">
+         <header class="w3-teal w3-center"><h1>Settled Loans</h1>
+             <form name="date_form" class="form-inline" ng-submit="submit()">
+                 <div class="form-group">
+                     <label>Start Date<input type="date" ng-model="start_date" class="form-control" max="{{today}}" required></label>
+                 </div>
+                 <div class="form-group">
+                     <label>End Date<input type="date" ng-model="end_date" class="form-control"  max="{{today}}" required></label>
+                 </div>
+                 <button type="submit" class="btn btn-success" ng-disabled="date_form.$invalid">Load Settled Loans</button>
+             </form>
+         </header>
+         <div style="overflow:auto; height: 500px;">
+         <table class="table table-condensed table-striped table-hover table-responsive">
+             <thead>
+             <tr>
+                 <th>Ticket Number</th>
+                 <th>Date</th>
+                 <th>Employee ID</th>
+                 <th>Client Name</th>
+                 <th>Loan Amount</th>
+                 <th>Payment Type</th>
+                 <th>Settlement Amount</th>
+                 <th>Payment Initialized By</th>
+                 <th><button class="btn btn-primary" ng-json-export-excel data="details" report-fields="{Id:'Request Id',RequestDate:'Date',StaffId:'Staff Id',StaffName:'Client Name',
+                 LoanNo:'Loan Number',LoanDate:'Loan Date',LoanAmount:'Loan Amount',SettlementAmount:'Settlement Amount', SettlementCharges:'Settlement Charges',
+                 SettlementTotal:'Settlement Total',Balance:'Settlement Balance',PaymentMobileNumber:'Payment Number',PaymentUserCode:'TL/DP Code',
+                 PaymentAuthorized:'Payment Authorized', PaymentNetworkProvider:'Network Provider',Status:'Status'}" filename =" 'payment-export' " separator="," class="css-class">
+                     <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                 </button></th>
+             </tr>
+             </thead>
+             <tbody>
+
+             <tr ng-repeat="detail in details">
+                 <td>{{detail.Id}}</td>
+                 <td>{{detail.RequestDate}}</td>
+                 <td>{{detail.StaffId}}</td>
+                 <td>{{detail.StaffName}}</td>
+                 <td>{{detail.LoanAmount}}</td>
+                 <td>{{detail.PaymentNetworkProvider}}</td>
+                 <td>{{detail.SettlementTotal}}</td>
+                 <td>{{detail.PaymentUserCode}}</td>
+                 <td><button onclick="document.getElementById('settlements_modal').style.display='block'"  ng-click="setSelected(detail)" class="btn btn-success">View</button>
+                 </td>
+             </tr>
+             </tbody>
+         </table>
+         <div class="w3-center" ng-if="found">
+             <br><br>
+             <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+
+         </div>
+         <div class="w3-center" ng-if="empty">
+             <br><br>
+             <p >Tray is empty</p>
+         </div>
+         </div>
+
+     </div>
+
+
+     <div class="w3-container">
+         <!---modal container----->
+
+
+         <!---modal to display the currently selected row--->
+
+
+         <div id="settlements_modal" class="w3-modal">
+             <div class="w3-modal-content w3-card-4">
+                 <header class="w3-container w3-teal">
+                     <span onclick="document.getElementById('settlements_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                     <h2>Settlement Details</h2>
+                 </header>
+                 <!---header for the modal----->
+
+                 <div class="w3-container">
+                    <table>
+                        <tbody>
+                        <tr><td>Settlement Id: {{claim.Id}}</td><td>Settlement Date: {{claim.RequestDate}}</td></tr>
+                        <tr><td>Staff Id: {{claim.StaffId}}</td><td>Staff Name: {{claim.StaffName}}</td></tr>
+                        <tr><td>Loan Date: {{claim.LoanDate}}</td><td>Loan Number: {{claim.LoanNo}}</td></tr>
+                        <tr><td>Loan Amount: {{claim.LoanAmount}}</td><td>Settlement Amount: {{claim.SettlementAmount}}</td></tr>
+                        <tr><td>Settlement Charges:{{claim.SettlementCharges}}</td><td>Settlement Total: {{claim.SettlementTotal}}</td></tr>
+                        <tr><td>Balance: {{claim.Balance}}</td><td>Payment Number: {{claim.PaymentMobileNumber}}</td></tr>
+                        <tr><td>Processed By: {{claim.PaymentUserCode}}</td><td>Network Provider: {{claim.PaymentNetworkProvider}}</td></tr>
+                        </tbody>
+                    </table>
+                 </div>
+
+
+
+                 <footer class="w3-container w3-teal">
+                     <!---modal footer--->
+                     <div class="w3-right w3-margin" id="footer_button">
+                         <button class="w3-btn w3-red" type="button" onclick="document.getElementById('settlements_modal').style.display='none'">
+                             CLOSE
+                         </button>
+
+                     </div>
+                 </footer>
+                 <!--end of modal footer-->
+
+
+
+             </div>
+         </div>
+
+     </div>
+     <!---end of pending qc container--->
+ </div>
+</div>

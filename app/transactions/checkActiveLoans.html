@@ -1,0 +1,45 @@
+<div ng-controller="checkActiveLoans_Ctrl">
+    <div class="col-md-8 col-md-offset-2">
+<br><br>
+        <div class='w3-card-2'>
+            <div class="w3-center">
+                <form ng-submit="searchLoan()" class="form-inline">
+                    <div class="form-group"><label>Enter Staff ID</label> <input type="text" class="form-control" ng-model="employeeId"></div>
+                    <button class="btn btn-primary" type="submit">Search Loan</button>
+                </form>
+            </div>
+            <div ng-if="found" class="w3-center"><i class="fa fa-circle-notch fa-spin fa-2x"></i></div>
+            <div ng-if="error" class="w3-text-red w3-center">{{message}}</div>
+            <div ng-repeat="detail in details">
+                <br>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                    <tr>
+                        <th>Employee ID: {{detail.Employee_Id}}</th><th>Name: {{detail.StaffName}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><span class="w3-text-red"> Loan Number: {{detail.Loan_No}}</span></td><td>Loan Issue Date: {{detail.Loan_Issue_Date|date:'shortDate'}}</td>
+                    </tr>
+                    <tr>
+                        <td>Deduction Start Period: {{detail.Deduction_Start_Period}}</td><td>Loan Amount: {{detail.Loan_Amount}}</td>
+                    </tr>
+                    <tr>
+                        <td>Loan Term: {{detail.Loan_Term}}</td><td>Monthly Installment: {{detail.Monthly_Installment}}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="w3-text-blue">Replacement Amount: {{detail.ReplacementAmountDue}}</span></td><td><span class="w3-text-red">Outright Amount: {{detail.OutrightAmountDue}}</span></td>
+                    </tr>
+                    <tr>
+                        <td>Total Outstanding: {{detail.TotalOutstanding}}</td><td>Total Collectible: {{detail.Total_Collectible}}</td>
+                    </tr>
+                    <tr>
+                        <td>Loan Type: {{detail.LoanType}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

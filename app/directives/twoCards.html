@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="w3-panel w3-blue w3-padding">
+            <p class="card-title">{{claim.StaffName}} </p>
+            <p class="card-text">Loan No: {{claim.Loan_No}} </p>
+            <p class="card-subtitle mb-2">Settlement: <strong>GHC {{claim.OutrightAmountDue}}</strong></p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="w3-panel w3-yellow w3-padding">
+            <p class="card-subtitle mb-2">Staff ID: {{claim.Employee_Id}}</p>
+            <p class="card-subtitle">Loan Date: {{claim.Loan_Issue_Date|date:'shortDate'}}</p>
+            <p class="card-subtitle">Loan Term: {{claim.Loan_Term}} months</p>
+            <p class="card-subtitle mb-2">Loan Amount: {{claim.Loan_Amount}}</p>
+        </div>
+    </div>
+</div>
+<br>

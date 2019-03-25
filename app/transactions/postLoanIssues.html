@@ -1,0 +1,89 @@
+<div ng-controller="postLoanIssues_Ctrl">
+    <div class="col-md-12">
+    <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+    <div class="col-md-8 col-md-offset-2">
+
+        <br>
+            <div class="row">
+                <div class="w3-card-2">
+                    <header class="w3-teal">
+                        <h3 class="w3-padding">POST LOAN ISSUE</h3>
+                    </header>
+
+                    <div class="w3-container">
+                        <form ng-submit="postLoanIssue()">
+
+                            <div class="form-group">
+                                <label>
+                                    STAFF ID
+                                </label>
+                                <input type="text" class="form-control" ng-model="loanIssue.staffId">
+
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    CLIENT NAME
+                                </label>
+                                <input type="text" class="form-control" ng-model="loanIssue.clientname" placeholder="input client name here">
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>
+                                    CATEGORY
+                                </label>
+                                <select type="text" class="form-control" ng-model="loanIssue.category">
+                                    <option ng-repeat="category in categories" value="{{category}}">
+                                        {{category}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    DESCRIPTION
+                                </label>
+                                <textarea type="text" class="form-control" ng-model="loanIssue.description"></textarea>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>
+                                    STAFF TYPE
+                                </label>
+                                <select type="text" class="form-control" ng-model="loanIssue.stafftype">
+                                    <option ng-repeat="employer in employers" value="{{employer}}">
+                                        {{employer}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+                                    ISSUE TYPE
+                                </label>
+                                <select type="text" class="form-control" ng-model="loanIssue.issuetype">
+                                    <option ng-repeat="issue in issues" value="{{issue}}">
+                                        {{issue}}
+                                    </option>
+                                </select>
+                            </div>
+
+
+
+
+
+                                <button class="btn btn-primary btn-block" type="submit">SUBMIT</button>
+
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+</div>

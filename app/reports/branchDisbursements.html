@@ -1,0 +1,217 @@
+
+
+<div ng-controller="branchDisbursements_Ctrl">
+    <div class="col-md-12">
+        <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+        <div class="w3-card-4 w3-margin">
+            <div class="w3-teal w3-bar">
+                <h2 class="w3-bar-item">Branch Disbursement</h2>
+                <div class="w3-bar-item"> <form name="date_form" class="form-inline" ng-submit="submit()">
+                    <div class="form-group">
+                        <label>Start Date<input type="date" ng-model="start_date" class="form-control" max="{{today}}" required></label>
+                    </div>
+                    <div class="form-group">
+                        <label>End Date<input type="date" ng-model="end_date" class="form-control"  max="{{today}}" required></label>
+                    </div>
+                    <button type="submit" class="btn btn-success" ng-disabled="date_form.$invalid">Load Transactions</button>
+                </form>
+
+                </div>
+                <div class="w3-bar-item w3-right"> <input class="form-control" type="text" ng-model="search" placeholder="search"></div>
+            </div>
+
+            <div style="overflow:auto; height: 500px;">
+                <table class="w3-table w3-striped">
+                    <thead>
+                    <tr class="w3-light-grey">
+                        <th>Request ID</th>
+                        <th><a ng-href="" ng-click="sortType = 'StatusDate'; sortReverse = !sortReverse">Date Paid<span ng-show="sortType == 'StatusDate' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'StatusDate' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th> <a ng-href="" ng-click="sortType = 'ClientRefId'; sortReverse = !sortReverse"> Employee ID<span ng-show="sortType == 'ClientRefId' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'ClientRefId' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th>Client Name</th>
+                        <th><a ng-href="" ng-click="sortType = 'EmployerName'; sortReverse = !sortReverse">Employer<span ng-show="sortType == 'Employer' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'EmployerName' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th><a ng-click="sortType = 'LoanType'; sortReverse = !sortReverse"><strong>Loan Type</strong><span ng-show="sortType =='LoanType' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'LoanType' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th><a ng-click="sortType = 'PaymentMethod'; sortReverse = !sortReverse"><strong>Payment Method</strong> <span ng-show="sortType == 'PaymentMethod' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'PaymentMethod' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th>TL </th>
+                        <th>Paid By</th>
+                        <th>Posted Date</th>
+                        <th><a ng-click="sortType = 'Branch'; sortReverse = !sortReverse"><strong>Branch</strong><span ng-show="sortType == 'Branch' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'Branch' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th><button class="btn btn-primary" onclick="document.getElementById('export_modal').style.display='block'">
+                            <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                        </button></th>
+
+                    </tr>
+                    </thead>
+                    <!----end of table head---->
+
+
+                    <tbody>
+                    <!--starting table body--->
+
+                    <tr ng-repeat="detail in details| orderBy:sortType:sortReverse|filter:search"><!---applying ng repeat to display sets of data in the api call---->
+                        <td class="w3-left-align">{{detail.Id}}</td>
+                        <td class="w3-left-align">{{detail.StatusDate|date:"MM/dd/yyyy @ h:mma"}}</td>
+                        <td class="w3-left-align">{{detail.ClientRefId}}</td>
+                        <td class="w3-left-align">{{detail.ClientName}}</td>
+                        <td class="w3-left-align">{{detail.EmployerName}}</td>
+                        <td class="w3-left-align">{{detail.LoanType}}</td>
+                        <td class="w3-left-align">{{detail.PaymentMethod}}</td>
+                        <td class="w3-left-align">{{detail.TLCode}}</td>
+                        <td class="w3-left-align">{{detail.StatusByUser}}</td>
+                        <td class="w3-left-align">{{detail.CreatedByDate|date:"MM/dd/yyyy @ h:mma"}}</td>
+                        <td class="w3-left-align">{{detail.Branch}}</td>
+                        <td><button onclick="document.getElementById('paid_deals_modal').style.display='block'" ng-click="setSelected(detail);call_selfie();get_passport();" class="btn btn-success">View</button>
+                        </td>
+                    </tr>
+                    <!--end of ng repeat---->
+                    </tbody>
+                    <!--end of table body--->
+                </table>
+                <!---end of table-->
+                <div class="w3-center" ng-if="found">
+
+                    <br><br>
+                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
+                <div class="w3-center">
+                    <br><br>
+                    <p ng-if="empty">Tray is empty</p>
+                </div>
+            </div>
+
+
+
+
+            <div class="w3-container">
+                <!---modal container----->
+
+
+                <!---modal to display the currently selected row--->
+
+
+                <div id="paid_deals_modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-container w3-teal">
+                            <span onclick="document.getElementById('paid_deals_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <h2>Transaction Details</h2>
+                        </header>
+                        <!---header for the modal----->
+
+                        <div class="w3-container" id="table">
+                            <!--container to hold table to display the currently selected client data--->
+                            <div class="w3-center">
+                                <div class="w3-half w3-card">
+                                    <div class="w3-center">
+                                        <br><br>
+                                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" ng-if="selfie_spin"></i>
+
+                                    </div>
+                                    <img ng-src="{{selfie}}" style="width:90%" alt="{{selfie_alt}}"  class="w3-text w3-margin">
+                                </div>
+                                <div class="w3-half w3-card">
+                                    <div class="w3-center">
+                                        <br><br>
+                                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" ng-if="passport_spin"></i>
+
+                                    </div>
+                                    <img ng-src="{{'data:image/png;base64,'+ passport}}" alt="{{passport_alt}}" style="width:90%" class="w3-text w3-margin">
+                                </div>
+                            </div>
+                            <!---content to hold the selfie or image of the currently selected client--->
+
+                            <table class="w3-table w3-striped w3-border">
+                                <!--beginning of the table to diplay currently selected client data----->
+                                <tbody>
+
+                                <tr><td>STAFF ID: {{claim.ClientRefId}}</td><td>EMPLOYEE NAME: {{claim.ClientName}}</td></tr>
+                                <tr><td>EMPLOYER: {{claim.EmployerName}}</td><td>PAYMENT METHOD: {{claim.PaymentMethod}}</td></tr>
+                                <tr><td>GROSS: {{claim.GrossAmount}}</td><td>NET: {{claim.NetAmount|number:2}}</td></tr>
+                                <tr><td>PAID AT: {{claim.StatusDate|date:'short'}}</td><td>TENOR: {{claim.Tenor}}</td></tr>
+                                <tr><td>DP CODE: {{claim.Deal_DPCode}}</td><td>DP NAME: {{claim.TNT_DPCode}}</td></tr>
+                                <tr><td>TRANSACTION TYPE: {{claim.LoanType}}</td><td>PAYMENT NUMBER: {{claim.MobileNumber}}</td></tr>
+                                <tr><td>CONTACT NUMBER: {{claim.ContactNumber}}</td><td>PAID BY: {{claim.StatusByUser}} </td></tr>
+                                <tr><td>TL CODE: {{claim.CreatedByUser}}</td><td>TL NAME: {{claim.TLCode}}</td></tr>
+                                <tr><td>AFFORDABILITY: {{claim.Affordability}}</td><td>ACCOUNT NUMBER: {{claim.AccountNumber}}</td></tr>
+                                <tr><td>Commission: {{claim.Commission|number:2}}</td><td>SELFIE CODE: {{claim.SelfieCode}}</td></tr>
+                                <tr><td>OVERIDER :{{claim.Overider}}</td><td>TIN NUMBER: {{claim.TinNumber}}</td></tr>
+                                <tr><td>BRANCH: {{claim.UserBranch}}</td><td>TL Comments:{{claim.Comments}}</td></tr>
+
+                                </tbody>
+                                <!--end of table body--->
+                            </table>
+                            <!---end of table --->
+
+                        </div>
+                        <!---end of container--->
+
+
+
+                        <footer class="w3-container w3-teal">
+                            <!---modal footer--->
+                            <div class="w3-right w3-margin" id="footer_button">
+                                <button class="w3-btn w3-red" type="button" onclick="document.getElementById('paid_deals_modal').style.display='none'">
+                                    CLOSE
+                                </button>
+
+
+                            </div>
+                        </footer>
+                        <!--end of modal footer-->
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!---end of pending qc container--->
+
+
+            <div class="w3-container">
+                <div id="export_modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-teal w3-container">
+                            <span onclick="document.getElementById('export_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <h2 class="w3-center">Exports</h2></header>
+                        <div class="w3-container">
+
+                            <table class="w3-table">
+
+                                <tbody>
+                                <tr>
+                                    <td> <button class="btn btn-success" ng-json-export-excel data="details" report-fields="{StatusDate:'Paid At',Id:' Loan ID',ClientRefId:'Client ID',CreatedByDate:'Date Posted',
+              ClientName:'ClientName',EmployerName:'Employer',LoanType:'Loan Type',Tenor:'Tenor',PaymentMethod:'Payment Method',StatusByUser:'Paid By',CreatedByUser:'TL Code',TLCode:'TL Name',Branch:'Payment Branch',GrossAmount:'Gross',
+              NetAmount:'Net',Deal_DPCode:'DP Code',TNT_DPCode:'DP Name',SelfieCode:'Selfie DP(TNT)',MobileNumber:'Payment Number',ContactNumber:'Contact Number',Commission:'Commission',Overider:'Overider',
+              EmployerType:'Employer Type',TinNumber:'Tin Number',Affordability:'Affordability',AccountNumber:'Account Number',UserBranch:'TL Branch',
+              paymentMethodAlt:'Altenative Payment Method',Comments:'TLs Note'}" filename =" 'disbursement-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>Disbursement Report</strong></i>
+                                    </button></td>
+
+                                    <td> <button class="btn btn-warning" ng-json-export-excel data="details" report-fields="{StatusDate:'Paid At',Id:' Loan ID',ClientRefId:'Client ID',
+              ClientName:'ClientName',EmployerName:'Employer',CreatedByUser:'TL Code',TLCode:'TL Name',Branch:'Payment Branch',GrossAmount:'Gross',
+              NetAmount:'Net',Deal_DPCode:'DP Code',TNT_DPCode:'DP Name',UserBranch:'TL Branch'}" filename =" 'TNT-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>TNT Report</strong></i>
+                                    </button></td>
+
+
+
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

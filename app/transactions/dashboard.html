@@ -1,0 +1,99 @@
+<div ng-controller="dashboard_Ctrl">
+
+<div class="col-md-4">
+
+       <div class="w3-card-4 w3-margin">
+                <header class="w3-container w3-teal w3-center">
+                  <h2>CHART</h2>
+                </header>
+                <canvas id="pie" class="chart chart-pie"
+                  chart-data="data" chart-labels="labels" chart-options="options">
+                </canvas>
+
+        <div class="w3-center" ng-if="loaded">
+            <i class="fa fa-line-chart fa-5x" aria-hidden="true"></i>
+        </div>
+
+       </div>
+                         <br>
+
+
+</div>
+
+
+
+
+    <div class="col-md-8">
+        <div class="w3-card-4 w3-margin">
+                <header class="w3-container w3-teal w3-center">
+                  <h2>DASHBOARD</h2>
+                    <form name="date_form" class="form-inline" ng-submit="submit()">
+                        <div class="form-group">
+                        <label>Start Date<input type="date" ng-model="start_date" class="form-control" max="{{today}}" required></label>
+                        </div>
+                        <div class="form-group">
+                        <label>End Date<input type="date" ng-model="end_date" class="form-control"  max="{{today}}" required></label>
+                        </div>
+                         <button type="submit" class="btn btn-success" ng-disabled="date_form.$invalid">Load Transactions</button>
+                    </form>
+                </header>
+<div style="overflow:auto; height: 500px;">
+     <table class="table table-condensed table-striped table-hover table-responsive" id="#table">
+          <thead>
+            <tr class="w3-light-grey">
+                  <th><a ng-href="" ng-click="sortType = 'CreatedByDate'; sortReverse = !sortReverse">Date<span ng-show="sortType == 'CreatedByDate' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'CreatedByDate' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                 <th><a ng-href="" ng-click="sortType = 'CreatedByDate'; sortReverse = !sortReverse">Time<span ng-show="sortType == 'CreatedByDate' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'CreatedByDate' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                  <th>Employee ID</th>
+                  <th><a ng-href="" ng-click="sortType = 'EmployerName'; sortReverse = !sortReverse">Employer<span ng-show="sortType == 'EmployerName' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'EmployerName' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                  <th><a ng-href="" ng-click="sortType = 'LoanType'; sortReverse = !sortReverse">Loan Type<span ng-show="sortType == 'LoanType' && !sortReverse" class="fa fa-caret-down"></span>
+                      <span ng-show="sortType == 'LoanType' && sortReverse" class="fa fa-caret-up"></span></a></th>
+
+                  <th><a href="" ng-click="sortType = 'PaymentMethod'; sortReverse = !sortReverse">Payment Method <span ng-show="sortType == 'PaymentMethod' && !sortReverse" class="fa fa-caret-down"></span>
+                  <span ng-show="sortType == 'PaymentMethod' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                  <th>TL </th>
+                  <th><a href="" ng-click="sortType = 'TransactionStatus'; sortReverse = !sortReverse">Status<span ng-show="sortType == 'TransactionStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                  <span ng-show="sortType == 'TransactionStatus' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                  <th><a href="" ng-click="sortType = 'Branch'; sortReverse = !sortReverse">Branch<span ng-show="sortType == 'Branch' && !sortReverse" class="fa fa-caret-down"></span>
+                  <span ng-show="sortType == 'Branch' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                  <th><input type="text" class="form-control" placeholder=search ng-model="search"></th>
+                <th><button class="btn btn-primary" ng-json-export-excel data="details" report-fields="{CreatedByDate:'Date Posted',Id:' Loan ID', StatusDate:'Paid At',ClientRefId:'Client ID',ClientName:'ClientName',
+              EmployerName:'Employer',LoanType:'Loan Type',Tenor:'Tenor',PaymentMethod:'Payment Method',StatusByUser:'Paid By',CreatedByUser:'TL Code',TLCode:'TL Name',Branch:'Branch',GrossAmount:'Gross',
+              NetAmount:'Net',Deal_DPCode:'DP Code',TNT_DPCode:'DP Name',MobileNumber:'Payment Number',ContactNumber:'Contact Number',Commission:'Commission'}" filename =" 'payment-export' " separator="," class="css-class">
+                      <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                    </button></th>
+
+          </tr>
+        </thead>
+
+
+<tbody>
+
+        <tr ng-repeat="detail in details| orderBy:sortType:sortReverse| filter:search"><!---applying ng repeat to display sets of data in the api call---->
+            <td>{{detail.CreatedByDate|date:'longDate'}}</td>
+           <td>{{detail.CreatedByDate|date:'shortTime'}}</td>
+            <td>{{detail.ClientRefId}}</td>
+            <td>{{detail.EmployerName}}</td>
+            <td>{{detail.LoanType}}</td>
+            <td>{{detail.PaymentMethod}}</td>
+            <td>{{detail.CreatedByUser}}</td>
+            <td>{{detail.TransactionStatus|status_filter}}</td>
+            <td>{{detail.Branch}}</td>
+
+        </tr><!--end of ng repeat---->
+
+        </tbody><!--end of table body--->
+    </table><!---end of table--->
+    <div class="w3-center" ng-if="found">
+                 <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+                 <span class="sr-only">Loading...</span>
+            </div>
+</div>
+
+        </div>
+    </div>
+
+
+</div>

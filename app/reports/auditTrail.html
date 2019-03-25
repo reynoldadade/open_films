@@ -1,0 +1,196 @@
+<div ng-controller="auditTrail_Ctrl">
+
+    <div class="col-md-10 col-md-offset-1">
+
+        <div class="w3-card-2">
+            <div class="w3-container">
+                <h2>Audit Trail</h2>
+                <span class="w3-right">
+                    <button class="btn btn-primary" ng-json-export-excel data="details" report-fields="{StatusHistoryId:'Request ID',
+                    EmployeeId:'Employee ID',Status:'Action', StatusByUser:'Action By',StatusDate:'Time of Action'}" filename =" 'payment-export' " separator="," class="css-class">
+                      <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                    </button>
+                </span>
+
+                <div class="w3-row">
+                    <a href="javascript:void(0)" onclick="openAudit(event, 'Date');" ng-click="resetScope()">
+                        <div class="w3-third tablink w3-bottombar w3-hover-teal w3-padding">Report by Date</div>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAudit(event, 'Name');" ng-click="resetScope()">
+                        <div class="w3-third tablink w3-bottombar w3-hover-teal w3-padding">Report by Name</div>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAudit(event, 'Status');" ng-click="resetScope()">
+                        <div class="w3-third tablink w3-bottombar w3-hover-teal w3-padding">Report by Status</div>
+                    </a>
+                </div>
+                        <br>
+                <div id="Date" class="w3-container audit" style="display:none">
+
+                    <div class="w3-center">
+                        <form class="form-inline" ng-submit="getByDate()">
+                            <div class="form-group">
+                                <label>Start Date</label>
+                                <input type="date" ng-model="start_date" class="form-control" max="{{today}}">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="date" ng-model="end_date" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div style="overflow:auto; height: 500px;">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Employee ID</th>
+                            <th>Action</th>
+                            <th>Action By</th>
+                            <th>Time of Action</th>
+                            <th><input type="search" class="form-control" ng-model="search"> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="detail in details">
+                            <td>{{detail.LoanNo}}</td>
+                            <td>{{detail.EmployeeId}}</td>
+                            <td>{{detail.Status}}</td>
+                            <td>{{detail.StatusByUser}}</td>
+                            <td>{{detail.StatusDate|date:'MM/dd/yyyy @ h:mma'}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="w3-center" ng-if="found">
+
+                        <br><br>
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+
+                    </div>
+                    <div class="w3-center">
+                        <br><br>
+                        <p ng-if="error">{{message}}</p>
+                    </div>
+                    </div>
+                </div>
+
+                <div id="Name" class="w3-container audit" style="display:none">
+                    <div class="w3-center">
+                        <form class="form-inline" ng-submit="getByName()">
+                            <div class="form-group">
+                                <label>Start Date:</label>
+                                <input type="date" ng-model="start_date" class="form-control" max="{{today}}">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date:</label>
+                                <input type="date" ng-model="end_date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Username:</label>
+                                <input type="text" ng-model="name" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div style="overflow:auto; height: 500px;">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Employee ID</th>
+                            <th>Action</th>
+                            <th>Action By</th>
+                            <th>Time of Action</th>
+                            <th><input type="search" class="form-control" ng-model="search"> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="detail in details|filter:search">
+                            <td>{{detail.LoanNo}}</td>
+                            <td>{{detail.EmployeeId}}</td>
+                            <td>{{detail.Status}}</td>
+                            <td>{{detail.StatusByUser}}</td>
+                            <td>{{detail.StatusDate|date:'MM/dd/yyyy @ h:mma'}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="w3-center" ng-if="found">
+
+                        <br><br>
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+
+                    </div>
+                    <div class="w3-center">
+                        <br><br>
+                        <p ng-if="error">{{message}}</p>
+                    </div>
+                    </div>
+                </div>
+
+                <div id="Status" class="w3-container audit" style="display:none">
+                    <div class="w3-center">
+                        <form class="form-inline" ng-submit="getByStatus()">
+                            <div class="form-group">
+                                <label>Start Date:</label>
+                                <input type="date" ng-model="start_date" class="form-control" max="{{today}}">
+                            </div>
+                            <div class="form-group">
+                                <label>End Date:</label>
+                                <input type="date" ng-model="end_date" class="form-control" >
+                            </div>
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select type="text" ng-model="status" class="form-control">
+                                   <option ng-repeat="status in statuses">{{status.name}}</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div style="overflow:auto; height: 500px;">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Employee ID</th>
+                            <th>Action</th>
+                            <th>Action By</th>
+                            <th>Time of Action</th>
+                            <th><input type="search" class="form-control" ng-model="search"> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="detail in details|filter:search">
+                            <td>{{detail.LoanNo}}</td>
+                            <td>{{detail.EmployeeId}}</td>
+                            <td>{{detail.Status|status_filter}}</td>
+                            <td>{{detail.StatusByUser}}</td>
+                            <td>{{detail.StatusDate|date:'MM/dd/yyyy @ h:mma'}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="w3-center" ng-if="found">
+
+                        <br><br>
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+
+                    </div>
+                    <div class="w3-center">
+                        <br><br>
+                        <p ng-if="error">{{message}}</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

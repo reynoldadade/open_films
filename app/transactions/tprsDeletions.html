@@ -1,0 +1,139 @@
+<div ng-controller="tprsDeletions_Ctrl">
+
+    <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+        <div class="col-md-12">
+            <div class="w3-card-4 w3-margin">
+                <div class="w3-teal w3-bar">
+                    <h2 class="w3-bar-item">Pending Deletions</h2>
+
+                    <div class="w3-bar-item w3-right"> <input class="form-control" type="text" ng-model="search" placeholder="search"></div>
+                </div>
+
+                <div style="overflow:auto; height: 500px;">
+                    <table class="w3-table w3-striped">
+                        <thead>
+                        <tr class="w3-light-grey">
+                            <th>#</th>
+                            <th>Request Code</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Employee Id</th>
+                            <th>Employee Name</th>
+                            <th>Loan Number</th>
+                            <th>Settlement Type</th>
+                            <th>Settlement Amount</th>
+                            <th><button class="btn btn-success" ng-json-export-excel data="details" report-fields="{StatusDate:'Paid At',Id:' Loan ID',ClientRefId:'Client ID',CreatedByDate:'Date Posted',
+              ClientName:'ClientName',EmployerName:'Employer',PaymentMethod:'Payment Method',StatusByUser:'Paid By',CreatedByUser:'TL Code',TLCode:'TL Name',Branch:'Branch',GrossAmount:'Amount'
+             ,MobileNumber:'Payment Number',ContactNumber:'Contact Number',AccountNumber:'Account Number'}" filename =" 'pending_deletions' " separator="," class="css-class">
+                                <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                            </button></th>
+
+                        </tr>
+                        </thead>
+                        <!----end of table head---->
+
+
+                        <tbody>
+                        <tr ng-repeat="detail in details|filter:search">
+                            <th scope="row">{{$index + 1}}</th>
+                            <td>{{detail.Id}}</td>
+                            <td>{{detail.RequestDate|date:'shortDate'}}</td>
+                            <td>{{detail.RequestDate|date:'shortTime'}}</td>
+                            <td>{{detail.StaffId}}</td>
+                            <td>{{detail.StaffName}}</td>
+                            <td>{{detail.LoanNo}}</td>
+                            <td>{{detail.SettlementType}}</td>
+                            <td>{{detail.SettlementAmount}}</td>
+                            <td><button onclick="document.getElementById('deletions_modal').style.display='block'" ng-click="setSelected(detail);"
+                                         type="button" class="btn btn-success">View</button>
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                        <!--end of table body--->
+                    </table>
+                    <!---end of table-->
+                    <div class="w3-center" ng-if="found">
+
+                        <br><br>
+                        <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span>
+
+                    </div>
+                    <div class="w3-center">
+                        <br><br>
+                        <p ng-if="empty">Tray is empty</p>
+                    </div>
+                </div>
+
+
+
+
+             <div class="w3-container">
+            <!---modal container----->
+            <!---modal to display the currently selected row--->
+            <div id="deletions_modal" class="w3-modal">
+                <div class="w3-modal-content w3-card-4">
+                    <header class="w3-container w3-teal">
+                        <span onclick="document.getElementById('deletions_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <h2>Transaction Details</h2>
+                    </header>
+                    <!---header for the modal----->
+
+                    <div class="w3-container" id="table">
+                        <!--container to hold table to display the currently selected client data--->
+                        <!---content to hold the selfie or image of the currently selected client--->
+
+                        <table class="w3-table w3-striped w3-border">
+                            <!--beginning of the table to diplay currently selected client data----->
+                            <tbody>
+                            <tr>
+                                <td>STAFF ID: {{claim.StaffId}}</td><td>STAFF NAME: {{claim.StaffName}}</td>
+                            </tr>
+                            <tr>
+                                <td>LOAN No. :{{claim.LoanNo}}</td><td>LOAN DATE: {{claim.LoanDate|date:'shortDate'}}</td>
+                            </tr>
+                            <tr>
+                                <td>SETTLEMENT: {{claim.SettlementAmount}}</td><td>PAID BY: {{claim.StatusByUserId}}</td></tr>
+                            <tr>
+                                <td>PAYMENT NUMBER: {{claim.PaymentMobileNumber}}</td><td>NETWORK: {{claim.PaymentNetworkProvider}}</td>
+                            </tr>
+                            <tr>
+                                <td>MONTHLY INSTALLMENT: {{claim.MonthlyInstallments}}</td>
+                            </tr>
+                            <tr ng-show="claim.SettlementType === 'CHK'">
+                                <td>CHEQUE NUMBER: {{claim.ChequeNumber}}</td><td>BANK: {{claim.ChequeBank}}</td>
+                            </tr>
+                            <tr ng-show="claim.SettlementType === 'CHK'">
+                                <td>SORT CODE: {{claim.ChequeSortCode}}</td><td >CHEQUE AMOUNT:{{claim.ChequeAmount}}</td>
+                            </tr>
+                            <tr>
+                                <td>TL CODE: {{claim.SettlementTLCode}}</td><td ng-show="claim.SettlementType === 'CHK'">ISSUER NAME: {{claim.ChequeIssuerName}}</td>
+                            </tr>
+                            <tr><td>CONTACT NUMBER: {{claim.ContactNumber}}</td><td>SETTLEMENT TYPE: {{claim.SettlementType}}</td></tr>
+                            </tbody>
+                            <!--end of table body--->
+                        </table>
+                        <!---end of table --->
+
+                    </div>
+                    <!---end of container--->
+                    <footer class="w3-container w3-teal"><!---modal footer--->
+                        <div class="w3-right w3-margin" id="footer_button">
+                            <button class="w3-btn w3-red"  type="button" onclick="document.getElementById('deletions_modal').style.display='none'" ng-click="delete()">
+                                DELETE
+                            </button>
+
+                        </div>
+                    </footer><!--end of modal footer-->
+
+                    <!--end of modal footer-->
+
+                </div>
+            </div>
+        </div>
+            <!---end of pending qc container--->
+            </div>
+        </div>
+</div>

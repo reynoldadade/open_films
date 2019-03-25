@@ -1,0 +1,306 @@
+<div ng-controller="epayConfirmationCtrl">
+
+    <div class="col-md-12">
+        <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+        <div class="w3-card-4 w3-margin">
+            <div class="w3-teal w3-bar">
+                <h2 class="w3-bar-item">E-Pay Confirmation</h2>
+                <div class="w3-bar-item w3-right"><input type="text" class="form-control" placeholder=search ng-model="search"></div>
+            </div>
+            <div style="overflow:auto; height: 500px;">
+                <table class="w3-table w3-striped" id="tableToExport">
+                    <!----end of table head---->
+                    <thead >
+                    <tr class="w3-light-grey">
+                        <th>Request ID</th>
+                        <th><a ng-href="" ng-click="sortType = 'StatusDate'; sortReverse = !sortReverse">Date<span ng-show="sortType == 'StatusDate' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'StatusDate' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th>E-Pay Done At</th>
+                        <th>Employee ID</th>
+                        <th>Client Name</th>
+                        <th><a ng-href="" ng-click="sortType = 'EmployerType'; sortReverse = !sortReverse">Employer<span ng-show="sortType == 'Employer' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'EmployerType' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th><a ng-click="sortType = 'LoanType'; sortReverse = !sortReverse"><strong>Loan Type</strong><span ng-show="sortType =='LoanType' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'LoanType' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th><a ng-click="sortType = 'PaymentMethod'; sortReverse = !sortReverse"><strong>Payment Method</strong> <span ng-show="sortType == 'PaymentMethod' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'PaymentMethod' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                        <th>E-Pay Done By</th>
+                        <th>TL Code</th>
+                        <th><button class="btn btn-primary" onclick="document.getElementById('export_modal').style.display='block'">
+                            <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                        </button></th>
+                    </tr>
+                    </thead>
+
+                    <tbody><!--starting table body--->
+
+                    <tr ng-repeat="detail in details| orderBy:sortType:sortReverse|filter:search"><!---applying ng repeat to display sets of data in the api call---->
+                        <td class="w3-left-align">{{detail.Id}}</td>
+                        <td class="w3-left-align">{{detail.StatusDate|date:'longDate'}}</td>
+                        <td class="w3-left-align">{{detail.StatusDate|date:'shortTime'}}</td>
+                        <td class="w3-left-align">{{detail.ClientRefId}}</td>
+                        <td class="w3-left-align">{{detail.ClientName}}</td>
+                        <td class="w3-left-align">{{detail.EmployerTypeId}}</td>
+                        <td class="w3-left-align">{{detail.LoanType}}</td>
+                        <td class="w3-left-align">{{detail.PaymentMethod}}</td>
+                        <td class="w3-left-align">{{detail.StatusByUser}}</td>
+                        <td class="w3-left-align">{{detail.CreatedByUser}}</td>
+                        <td class="w3-left-align">{{detail.Branch}}</td>
+                        <td><button onclick="document.getElementById('pending_qc_modal').style.display='block'" ng-click="setSelected(detail);"
+                                    class="btn btn-success">View</button>
+                        </td>
+                    </tr><!--end of ng repeat---->
+                    </tbody><!--end of table body--->
+                </table><!---end of table-->
+
+                <div class="w3-center" ng-if="found">
+
+                    <br><br>
+                    <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+
+                </div>
+                <div class="w3-center">
+                    <br><br>
+                    <p ng-if="empty">Tray is empty</p>
+                </div>
+            </div>
+
+
+
+
+            <div class="w3-container"><!---modal container----->
+
+
+                <!---modal to display the currently selected row--->
+                <div id="pending_qc_modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-container w3-teal">
+                            <span onclick="document.getElementById('pending_qc_modal').style.display='none';document.getElementById('reject_form').style.display='none';document.getElementById('footer_button').style.display='block';" class="w3-button w3-display-topright">&times;</span>
+                            <h2>Transaction Details</h2>
+                        </header><!---header for the modal----->
+
+                        <div class="w3-container" id="table"><!--container to hold table to display the currently selected client data--->
+                            <!---content to hold the selfie or image of the currently selected client--->
+
+                            <table class="w3-table w3-striped w3-border"><!--beginning of the table to diplay currently selected client data----->
+                                <tbody>
+
+                                <tr><td>STAFF ID: {{claim.ClientRefId}}</td><td>EMPLOYEE NAME: {{claim.ClientName}}</td></tr>
+                                <tr><td>EMPLOYER: {{claim.EmployerName}}</td><td>PAYMENT METHOD: {{claim.PaymentMethod}}</td></tr>
+                                <tr><td>GROSS: {{claim.GrossAmount}}</td><td>NET: {{claim.NetAmount|number:2}}</td></tr>
+                                <tr><td>AFFORDABILITY: {{claim.Affordability}}</td><td>TENOR: {{claim.Tenor}}</td></tr>
+                                <tr><td>TPRS DONE AT: {{claim.StatusDate|date:'short'}}</td><td>TPRS DONE BY: {{claim.StatusByUser}}</td></tr>
+                                <tr><td>DP CODE: {{claim.Deal_DPCode}}</td><td>DP NAME: {{claim.TNT_DPCode}}</td></tr>
+                                <tr><td>TRANSACTION TYPE: {{claim.LoanType}}</td><td>PAYMENT CONTACT: {{claim.ContactNumber}}</td></tr>
+                                <tr><td>TL NAME: {{claim.TLCode}}</td><td>TL Code: {{claim.CreatedByUser}}</td></tr>
+                                <tr><td>ACCOUNT NUMBER: {{claim.AccountNumber}}</td><td>MOBILE NUMBER: {{claim.MobileNumber}}</td></tr>
+                                <tr><td>SELFIE CODE: {{claim.SelfieCode}}</td><td>EMPLOYER TYPE: {{claim.EmployerTypeId}}</td></tr>
+                                <tr><td>TIN NUMBER: {{claim.TinNumber}}</td><td>BRANCH: {{claim.Branch}}</td></tr>
+                                <tr><td>PAYMENT NUMBER: {{claim.PaymentName}}</td><td>Extra Loan Information:{{claim.Instructions}}</td></tr>
+                                <tr><td>
+                                    <label><input type="checkbox"
+                                                  ng-model="altPayment"
+                                                  ng-true-value = "'Paid with Altenative Payment Method'"
+                                                  ng-false-value = "'Paid with default Payment Method'"
+                                    > Alternative Payment Method</label>
+                                </td></tr>
+
+
+                                </tbody><!--end of table body--->
+                            </table><!---end of table --->
+
+                        </div><!---end of container--->
+
+
+
+                        <footer class="w3-container w3-teal"><!---modal footer--->
+                            <div class="w3-right w3-margin" id="footer_button">
+                                <button class="w3-btn w3-red"  type="button" onclick="document.getElementById('reject_form').style.display='block';
+                            document.getElementById('footer_button').style.display='none';">
+                                    REJECT
+                                </button>
+                                <button class="w3-btn w3-orange" type="button" ng-click="approve()" onclick="document.getElementById('pending_qc_modal').style.display='none'">PAY</button>
+                            </div>
+
+                            <div class="w3-content" id="reject_form" style="display: none"><!--container to display the error message form--->
+                                <div class="w3-threequarter">
+                                    <form class="w3-container" ng-submit="reject()" name="rejectForm">
+                                        <div class="w3-container" id="error-text" >
+                                            <div class="w3-half w3-right w3-margin">
+                                                <label for="error_code">Select Error:</label>
+                                                <select  ng-model="selected_error" class="form-control" id="error_code" required>
+                                                    <option ng-repeat ="errors in error_codes" value="{{errors.ErrorId}}">{{errors.ErrorName}}</option>
+                                                </select>
+                                                <br>
+                                                <textarea ng-model="reason" class="form-control" placeholder="Message" required></textarea>
+                                            </div>
+                                            <button class="w3-button w3-red w3-right w3-margin" type="submit" onclick="document.getElementById('pending_qc_modal').style.display='none'" ng-disabled="rejectForm.$invalid">REJECT</button>
+                                            <button class="w3-button w3-blue w3-right w3-margin"  type="button" onclick="document.getElementById('reject_form').style.display='none';document.getElementById('footer_button').style.display='block';">
+                                                BACK
+                                            </button>
+                                        </div>
+
+                                    </form><!--end of rejection form--->
+                                </div>
+                            </div><!--end of reject form --->
+
+                        </footer><!--end of modal footer-->
+
+
+
+                    </div>
+                </div>
+            </div><!---end of pending qc container--->
+
+
+            <div id="appointment" class="w3-modal">
+                <div class="w3-modal-content w3-card-4">
+                    <header class="w3-container w3-teal">
+                        <span onclick="document.getElementById('appointment').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <h2>Appointment Letter</h2>
+                    </header><!---header for the modal----->
+
+                    <div class="w3-container" id="appointmentImage"><!--container to hold table to display the currently selected client data--->
+                        <div class="w3-center">
+                            <div class="w3-center">
+                                <br><br>
+                                <i class="fa fa-circle-notch fa-spin fa-3x fa-fw" ng-if="appointment_spin"></i>
+
+                            </div>
+                            <img ng-src="{{appointment}}"  alt="{{appointment_alt}}"  style="size: auto" class="w3-text w3-margin">
+
+                        </div><!---content to hold the selfie or image of the currently selected client--->
+
+
+                    </div><!---end of container--->
+                </div>
+            </div><!---end of formA modal--->
+
+            <div class="w3-container">
+                <div id="export_modal" class="w3-modal">
+                    <div class="w3-modal-content w3-card-4">
+                        <header class="w3-teal w3-container">
+                            <span onclick="document.getElementById('export_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <h2 class="w3-center">Exports</h2></header>
+                        <div class="w3-container">
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3">
+                                   <button class="btn btn-success" ng-json-export-excel data="mtn_details_alt"
+                                                                  report-fields="{CreatedByDate:'Date Posted',StatusDate: 'QC Time',
+                                Id: 'LoanID', ClientRefId: 'Client ID',ClientName:'Client Name',
+                                LoanType:'Loan Type',Tenor:'Loan Term', EmployerName: 'Department',ContactNumber:'Payment Number',MobileNumber:'Mobile Number',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross',Branch:'Branch',NetAmount:'Net',
+                                MTN_Code:'MTN Code',Charges:'Charges',Total_amt_payable:'Total Amt Payable',Inflows:'Inflows',Balance:'Balance',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',SelfieCode:'SELFIE CODE',
+                                Deal_DPCode:'DP Code',TNT_DPcode:'DP Name'}" filename =" 'mtn_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>Alt. MTN to Excel</strong></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-warning" ng-json-export-excel data="gcb_details_alt"
+                                                                  report-fields="{CreatedByDate:'Date Posted',StatusDate: 'Date',
+                                Id: 'LoanID',ClientName:'ClientName',EmployerName: 'Employer',
+                                ClientRefId:'Employee ID',LoanType:'Loan Type',Tenor:'Loan Term',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross Amount',AccountNumber:'Account Number',
+                                Branch:'Branch',MobileNumber:'Payment Number',ContactNumber:'Contact Number',CreatedByUser:'TL Code',TLCode:'Team Leader',
+                                 Deal_DPCode:'DP Code',TNT_DPcode:'DP Name',Inflows:'Inflows Dr.',NetAmount:'Net Amount Cr.',PaymentMethod:'Payment Method',MobileNumber:'Payment Number',SelfieCode:'SELFIE CODE',
+                                 Balance:'Balance',Batch_No:'Batch NO.'}" filename =" 'gcb_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>Alt. GCB to Excel</strong></i>
+                                    </button>
+
+                                </div>
+                                <div class="col-md-3">
+
+                                    <button class="btn btn-info" ng-json-export-excel data="tigo_details__alt"
+                                                                  report-fields="{CreatedByDate:'Date Posted',StatusDate: 'QC Date',
+                                Id: 'LoanID',ClientName:'ClientName',ContactNumber:'Payment Number',MobileNumber:'Contact Number',
+                                TransactionType:'Type of Trxn',ClientRefId: 'Employee ID',
+                                LoanType:'Loan Type',Tenor:'Loan Term',Branch:'Branch',EmployerName: 'Employer',
+                                NetAmount:'Net',Charges:'Charges',Total_amt_payable:'Total Amt Payable',
+                                PaymentMethod:'Payment Method',GrossAmount:'Gross',Inflows:'Inflows',SelfieCode:'SELFIE CODE',
+                                Balance:'Balance',Batch_No:'Batch NO.',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',
+                                Deal_DPCode:'DP Code',TNT_DPcode:'DP Name'}" filename =" 'tigo_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>Alt. TIGO to Excel</strong></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                   <button class="btn btn-danger" ng-json-export-excel data="gn_details_alt"
+                                                                  report-fields="{CreatedByDate: 'Date Posted',
+                                Id: 'LoanID',ClientName:'ClientName',ClientRefId:'Employee ID',
+                                LoanType:'Loan Type',Tenor:'Loan Term',MobileNumber:'Client Phone Number',ContactNumber:'Payment Number',EmployerName:'Employer',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross Amount',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',Deal_DPCode:'DP Code',TNT_DPcode:'DP Name',SelfieCode:'SELFIE CODE',
+                                Branch:'Branch',Inflows:'Inflows Dr.',NetAmount:'Net Amount Cr.',PaymentMethod:'Payment Method',
+                                Balance:'Balance',StatusDate:'Time Received From QC',StatusByUser: 'Authorizer'}"
+                                                                  filename =" 'gnbank_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>Alt. GN Bank to Excel</strong></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <br><hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="w3-btn w3-yellow" ng-json-export-excel data="mtn_details"
+                                            report-fields="{CreatedByDate:'Date Posted',StatusDate: 'QC Time',
+                                Id: 'LoanID', ClientRefId: 'Client ID',ClientName:'Client Name',
+                                LoanType:'Loan Type',Tenor:'Loan Term', EmployerName: 'Department',ContactNumber:'Payment Number',MobileNumber:'Mobile Number',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross',Branch:'Branch',NetAmount:'Net',
+                                MTN_Code:'MTN Code',Charges:'Charges',Total_amt_payable:'Total Amt Payable',Inflows:'Inflows',Balance:'Balance',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',SelfieCode:'SELFIE CODE',
+                                Deal_DPCode:'DP Code',TNT_DPcode:'DP Name'}" filename =" 'mtn_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>MTN to Excel</strong></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="w3-btn w3-orange" ng-json-export-excel data="gcb_details"
+                                            report-fields="{CreatedByDate:'Date Posted',StatusDate: 'Date',
+                                Id: 'LoanID',ClientName:'ClientName',EmployerName: 'Employer',
+                                ClientRefId:'Employee ID',LoanType:'Loan Type',Tenor:'Loan Term',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross Amount',AccountNumber:'Account Number',
+                                Branch:'Branch',MobileNumber:'Payment Number',ContactNumber:'Contact Number',CreatedByUser:'TL Code',TLCode:'Team Leader',
+                                 Deal_DPCode:'DP Code',TNT_DPcode:'DP Name',Inflows:'Inflows Dr.',NetAmount:'Net Amount Cr.',PaymentMethod:'Payment Method',MobileNumber:'Payment Number',SelfieCode:'SELFIE CODE',
+                                 Balance:'Balance',Batch_No:'Batch NO.'}" filename =" 'gcb_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>GCB to Excel</strong></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="w3-btn w3-blue" ng-json-export-excel data="tigo_details"
+                                                                  report-fields="{CreatedByDate:'Date Posted',StatusDate: 'QC Date',
+                                Id: 'LoanID',ClientName:'ClientName',ContactNumber:'Payment Number',MobileNumber:'Contact Number',
+                                TransactionType:'Type of Trxn',ClientRefId: 'Employee ID',
+                                LoanType:'Loan Type',Tenor:'Loan Term',Branch:'Branch',EmployerName: 'Employer',
+                                NetAmount:'Net',Charges:'Charges',Total_amt_payable:'Total Amt Payable',
+                                PaymentMethod:'Payment Method',GrossAmount:'Gross',Inflows:'Inflows',SelfieCode:'SELFIE CODE',
+                                Balance:'Balance',Batch_No:'Batch NO.',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',
+                                Deal_DPCode:'DP Code',TNT_DPcode:'DP Name'}" filename =" 'tigo_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>TIGO to Excel</strong></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="w3-btn w3-deep-purple" ng-json-export-excel data="gn_details"
+                                            report-fields="{CreatedByDate: 'Date Posted',
+                                Id: 'LoanID',ClientName:'ClientName',ClientRefId:'Employee ID',
+                                LoanType:'Loan Type',Tenor:'Loan Term',MobileNumber:'Client Phone Number',ContactNumber:'Payment Number',EmployerName:'Employer',
+                                TransactionType:'Type of Trxn',GrossAmount:'Gross Amount',
+                                CreatedByUser:'TL Code',TLCode:'Team Leader',Deal_DPCode:'DP Code',TNT_DPcode:'DP Name',SelfieCode:'SELFIE CODE',
+                                Branch:'Branch',Inflows:'Inflows Dr.',NetAmount:'Net Amount Cr.',PaymentMethod:'Payment Method',
+                                Balance:'Balance',StatusDate:'Time Received From QC',StatusByUser: 'Authorizer'}"
+                                            filename =" 'gnbank_transactions-export' " separator="," class="css-class">
+                                        <i class="fas fa-file-excel"> <strong>GN Bank to Excel</strong></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

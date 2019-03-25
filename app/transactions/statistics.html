@@ -1,0 +1,129 @@
+<div ng-controller="statistics_Ctrl">
+<div class="col-md-12">
+    <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+
+    <div class="row">
+     <div class="col-md-3">
+
+        <div class="w3-card-4 w3-white w3-margin">
+            <header class="w3-teal w3-center">
+                <h2>Bio</h2>
+            </header>
+            <div class="w3-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJl4sgRVL_BiiL8kO47v_V2inwEWibkQN6-gj4RoJp3Vz5OqwG" alt="..." class="img-circle">
+            </div>
+        <ul class="list-group">
+            <li class="list-group-item">Name: <strong>{{logged_in.user}}</strong></li>
+            <li class="list-group-item">Code: <strong>{{logged_in.user_id}}</strong></li>
+            <li class="list-group-item">Role: <strong>{{user_data.Role}}</strong></li>
+            <li class="list-group-item">Branch:<strong>{{logged_in.branch}}</strong></li>
+            <li class="list-group-item">Sector:</li>
+            <li class="list-group-item">Last Login: <strong>{{logged_in.LastLogin}}</strong></li>
+            <li class="list-group-item"><button class="btn btn-info" onclick="document.getElementById('password_modal').style.display='block'">Change Password</button></li>
+        </ul>
+
+        </div>
+    </div>
+
+
+
+
+    <div class="col-md-9">
+        <div class="w3-card-4 w3-white w3-margin">
+            <header class="w3-teal w3-center">
+                <h2>Summary Table </h2>
+                <form name="date_form" class="form-inline" ng-submit="submit()">
+                        <div class="form-group">
+                        <label>Start Date<input type="date" ng-model="start_date" class="form-control" max="{{today}}" required></label>
+                        </div>
+                        <div class="form-group">
+                        <label>End Date<input type="date" ng-model="end_date" class="form-control"  max="{{today}}" required></label>
+                        </div>
+                         <button type="submit" class="btn btn-success" ng-disabled="date_form.$invalid">Load Transactions</button>
+                </form>
+                <table class="w3-table">
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary left-align" ng-json-export-excel data="details" report-fields="{StatusDate:'Date',EmployeeId:'Staff ID',Status:'Action',LoanNO:'Request ID',StatusByUser:'Action By'}" filename =" 'user_report' " separator="," class="css-class">
+                          <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                        </button>
+                        </td>
+                        <td><input type="text" class="form-control" placeholder="search"></td>
+                    </tr>
+                </table>
+
+
+
+
+
+            </header>
+
+            <div style="overflow:auto; height: 438px;">
+                <table class="table table-responsive table-condensed table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Staff ID</th>
+                        <th>Status</th>
+                        <th>Request Id</th>
+                        <th>Action By</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="detail in details| orderBy:sortType:sortReverse|filter:search"><!---applying ng repeat to display sets of data in the api call---->
+                         <td>{{detail.StatusDate|date:"MM/dd/yyyy @ h:mma"}}</td>
+                        <td>{{detail.EmployeeId}}</td>
+                        <td>{{detail.Status|status_filter}}</td>
+                        <td>{{detail.LoanNo}}</td>
+                        <td>{{detail.StatusByUser}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                                       <div class="w3-center" ng-if="found">
+
+                     <br><br>
+                 <i class="fa fa-circle-notch fa-spin fa-3x fa-fw"></i>
+                 <span class="sr-only">Loading...</span>
+
+            </div>
+                <div class="w3-center">
+                     <br><br>
+                    <p ng-if="empty">Tray is empty</p>
+                </div>
+          </div>
+        </div>
+
+    </div>
+
+     <div class="w3-container"><!---modal container----->
+    <!---modal to display the currently selected row--->
+          <div id="password_modal" class="w3-modal">
+
+            <div class="w3-modal-content w3-card-4">
+              <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('password_modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <h2>Edit Password</h2>
+              </header><!---header for the modal----->
+
+            <form class="w3-container" ng-submit="change_password()" name="password_form">
+                 <label for="old_password">Old Password</label>
+                <input class="form-control" type="text" id="old_password" ng-model="old_password" required>
+                 <label for="new_password">New Password</label>
+                <input class="form-control" type="text" id="new_password" ng-model="new_password" required>
+                <label for="confirm_new_password">Confirm New Password</label>
+                <input class="form-control" type="text" id="confirm_new_password" name="password2" ng-model="confirm_new_password" ng-pattern="new_password" required>
+                <p id="error" ng-show="edit_form.password2.$error.pattern" class="w3-center">Passwords do not match</p>
+
+                <button class="w3-button w3-blue w3-right w3-margin" type="submit" onclick="document.getElementById('password_modal').style.display='none'"  ng-disabled="password_form.password2.$error.pattern || edit_form.$invalid">CHANGE</button>
+
+            </form><!--end of rejection form--->
+            </div><!--end of reject form --->
+          </div>
+</div>
+</div>
+</div>
+
+</div>

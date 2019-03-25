@@ -1,0 +1,51 @@
+<div ng-controller="momoCtrl">
+    <div class="col-md-12">
+    <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+    <div class="container" style="margin-top: 2%">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="w3-card">
+                <header class="w3-padding w3-teal">
+                    Mobile Money Settlement
+                </header>
+                <div class="w3-container w3-padding">
+
+                       <two-cards claim="claim"></two-cards>
+                    <form name="momoForm" ng-submit="postMomoSettlement()">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Enter Payment Mobile Number" ng-model="momo.momoNumber" class="form-control" name="momo.momoNumber" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" placeholder="Repeat Payment Mobile Number" ng-model="momoNumberRepeat" class="form-control" name="momoNumberRepeat" required ng-pattern="momo.momoNumber">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="alert alert-danger" ng-show="momoForm.momoNumberRepeat.$error.pattern">Numbers do  not match</div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" placeholder="Contact Number" ng-model="momo.contactNumber" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Select Mobile Network</label>
+                                <select  ng-model="momo.network" class="form-control" required>
+                                    <option ng-repeat="network in networks" ng-value="network.Code">{{network.Name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <!-- Modal -->
+
+                        <div class="form-group col">
+                            <button class="btn btn-block btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

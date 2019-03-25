@@ -1,0 +1,101 @@
+<div ng-controller="postRefundCtrl">
+    <div class="col-md-12">
+        <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+    </div>
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <div class="w3-card-2">
+            <header class="w3-teal w3-padding">
+                Check Refund Eligibility
+            </header>
+            <form name="refundForm" class="form-inline" ng-submit="checkRefund()">
+                <br>
+                <div class="w3-container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" placeholder="Enter ID to Search for Settlement Amount" class="form-control" ng-model="refundData.EmployeeId">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-success">Search for Refunds</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <span class="w3-center" ng-if="searching"><i class="fa fa-circle-notch fa-spin fa-2x"></i></span>
+            <br>
+            <header class="w3-padding w3-yellow text-center" ng-if="error">{{info.title}}</header>
+
+            <br>
+            <div class="w3-card" ng-if="showForm">
+                <header class="w3-teal w3-padding">
+                    Post Refund Request
+                </header>
+                <div class="w3-container">
+                    <form name="postRefund"  ng-submit="sendRefund()">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employee ID</label>
+                                    <input type="text" readonly class="form-control" ng-value="refundData.EmployeeId">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employee Name </label>
+                                    <input type="text" readonly class="form-control" ng-value="claim.StaffId">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Payment Method</label>
+                                    <select type="text" class="form-control" ng-model="refundData.paymentMethod" required>
+                                        <option ng-repeat="payment in payments" value="{{payment}}">{{payment}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Branch</label>
+                                    <select  class="form-control"  ng-model="refundData.branch" required>
+                                        <option ng-repeat="branch in branches" value="{{branch}}">{{branch}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contact Number</label>
+                                    <input type="text"  class="form-control" ng-model="refundData.contactNumber" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Payment Number </label>
+                                    <input type="text"  class="form-control" ng-model="refundData.paymentNumber" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount </label>
+                                    <input type="text"  class="form-control" ng-model="refundData.refundAmount"  ng-value="claim.Amount"  readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

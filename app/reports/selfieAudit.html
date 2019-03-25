@@ -1,0 +1,20 @@
+<div ng-controller="selfieAudit_Ctrl">
+    <div class="col-md-12">
+        <br><br>
+
+        <div class="w3-center">
+            <form class="form-inline" ng-submit="getClientImages()">
+                <div class="form-group">
+                    <input type="text" ng-model="staffid" class="form-control" placeholder="input Staff ID here">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit
+                </button>
+            </form>
+            <br><br>
+            <i class="fa fa-spin fa-circle-o-notch fa-2x" ng-if="spin"></i>
+            <div ng-if="found">
+                <carousel datas="datas"></carousel>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div ng-controller="settleLoan_Ctrl">
+   <div class="col-md-12">
+       <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+       <div class="container">
+           <div class="row"  style="margin-top: 7%">
+               <div class="col-md-6 col-md-offset-3">
+                   <div class="w3-card-2">
+                       <header class="w3-teal w3-padding">Request for Settlement</header>
+                       <br>
+                       <form ng-submit="searchSettlement()">
+                           <div class="w3-container">
+                               <div class="row">
+                                   <div class="col-md-6">
+                                       <input type="text" placeholder="Enter ID to Search for Settlement Amount" class="form-control" ng-model="settlement.EmployeeId">
+                                   </div>
+                                   <div class="col-md-6">
+                                       <button type="submit" class="btn btn-block btn-success">Search for Active loans</button>
+                                   </div>
+                               </div>
+                           </div>
+                       </form>
+                       <br>
+
+                       <span class="w3-center" ng-if="searching"><i class="fa fa-circle-notch fa-spin fa-2x"></i></span>
+                       <div class="alert alert-danger text-center" ng-if="error">{{message}}</div>
+
+
+                       <br>
+                       <div class="w3-card" ng-if="found">
+                           <header class="w3-padding w3-teal">Number of Loans found :{{count}}</header>
+                           <div class="card-body">
+                               <ul class="list-group list-group-flush">
+                                   <li class="list-group-item text-center lead" ng-repeat="detail in details">
+                                       Loan Number: {{detail.Loan_No}} <button type="button" class="btn btn-warning" ng-click="setSelected(detail)">View</button>
+                                   </li>
+                               </ul>
+
+                               <ul class="list-group list-group-flush" ng-if="clicked">
+                                   <li class="list-group-item">Employee Name: {{claim.Employee_Name}}</li>
+                                   <li class="list-group-item">Loan Number: {{claim.Loan_No}}</li>
+                                   <li class="list-group-item">Loan Issue Date: {{claim.Loan_Issue_Date|date:'shortDate'}}</li>
+                                   <li class="list-group-item">Loan Amount: {{claim.Loan_Amount}}</li>
+                                   <li class="list-group-item">Settlement Amount: {{claim.OutrightAmountDue}}</li>
+                                   <li class="list-group-item">
+                                       <a class="btn btn-warning btn-block" ng-href="#!/momo"><i class="fas fa-mobile"></i> Pay with Mobile Money</a>
+                                       <a class="btn btn-primary btn-block" ng-href="#!/cheque"><i class="fas fa-money-check"></i> Pay with Cheque/Pay-in Slip</a>
+                                       <a class="btn btn-info btn-block" ng-href="#!/bank"><i class="fas fa-credit-card"></i> Pay with Debit Card</a>
+                                   </li>
+                               </ul>
+                           </div>
+                       </div>
+
+
+                   </div>
+               </div>
+
+
+
+           </div>
+       </div>
+   </div>
+</div>

@@ -1,0 +1,78 @@
+<div ng-controller="settlementReceipt_Ctrl">
+<div class="col-md-6 col-md-offset-3">
+    <div class="w3-card-2" id="printArea">
+        <div class="w3-bar w3-teal">
+            <img class="w3-bar-item" src="static/images/dalex_logo.png"></a>
+            <span class="w3-bar-item"><h2>Online Settlement Receipt</h2></span>
+        </div>
+        <table class="w3-table">
+           <thead>
+                <tr>
+                    <th>Receipt Number: {{details.receiptNumber}}</th><th>Date: {{details.receiptDate|date:'longDate'}}</th>
+                </tr>
+           </thead>
+            <tbody>
+            <tr>
+                <td>Client Name : {{details.receiptClient}}</td> <td>Phone Number: {{details.receiptClientPhone}}</td>
+            </tr>
+            <tr>
+                <td>Cheque Number : {{details.receiptChequeNumber}}</td> <td>Phone Number: {{details.receiptClientPhone}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+        <br>
+        <table class="table table-condensed table-bordered">
+            <thead>
+                <tr class="w3-blue">
+                    <th>Loan N/O.</th>
+                    <th>Description</th>
+                    <th>Amount Paid</th>
+                </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    {{details.receiptLoanNo}}
+                </td>
+                <td>
+                    Outright Loan Settlement ({{details.receiptType}})
+                </td>
+                <td>{{details.receiptAmount}}</td>
+            </tr>
+
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td> <td></td> <td></td>
+            </tr>
+            <tr class="w3-blue">
+                 <td>Total</td><td></td> <td>GHS {{details.receiptAmount}}</td>
+            </tr>
+            <tr class="w3-blue">
+                <td>Processed By </td> <td></td> <td>{{details.receiptTLName}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-primary" ng-click="printDiv('printArea');">Print Receipt</button>
+</div>
+</div>

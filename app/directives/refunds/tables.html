@@ -1,0 +1,205 @@
+<br>
+<div class="col-md-10 col-md-offset-1">
+    <div class="w3-card">
+        <header class="w3-padding w3-teal">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>{{info.title}}</h3>
+                </div>
+                <div class="col-md-7">
+                    <form name="date_form" class="form-inline" ng-submit="submit()" ng-if="info.showForm">
+                        <div class="form-group">
+                            <label>Start Date<input type="date" ng-model="format.start_date" class="form-control" max="{{today}}" required></label>
+                        </div>
+                        <div class="form-group">
+                            <label>End Date<input type="date" ng-model="format.end_date" class="form-control"  max="{{today}}" required></label>
+                        </div>
+                        <button type="submit" class="btn btn-success" ng-disabled="date_form.$invalid">Load Transactions</button>
+                    </form>
+
+                </div>
+                <div class="col-md-2">
+                    <input type="search" ng-model="search" class="form-control" placeholder="search">
+                </div>
+            </div>
+        </header>
+        <div style="overflow:auto; height: 500px;">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Request ID</th>
+                    <th><a ng-href="" ng-click="sortType = 'CreatedByDate'; sortReverse = !sortReverse">Date<span ng-show="sortType == 'CreatedByDate' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'CreatedByDate' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                    <th>Time</th>
+                    <th>Employee ID</th>
+                    <th>Client Name</th>
+                    <th><a ng-href="" ng-click="sortType = 'Employer'; sortReverse = !sortReverse">Employer<span ng-show="sortType == 'Employer' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'Employer' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                    <th><a href="" ng-click="sortType = 'PaymentMode'; sortReverse = !sortReverse">Payment Method <span ng-show="sortType == 'PaymentMode' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'PaymentMode' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                    <th>TL Name </th>
+
+                    <th><a href="" ng-click="sortType = 'Branch'; sortReverse = !sortReverse">Branch<span ng-show="sortType == 'Branch' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'Branch' && sortReverse" class="fa fa-caret-up"></span></a></th>
+                    <th><button class="btn btn-primary" ng-json-export-excel data="details"
+                                report-fields="{StatusByDate:'Paid At',Id:'Loan ID',EmployeeID:'Client ID',CreatedByDate:'Date Posted',
+                            ClientName:'ClientName',PaymentMode:'Payment Mode',StatusByUser:'Paid By',TransactionType:'Transaction Type',
+                            CreatedByUser:'TL Code',TLCode:'TL Name',Branch:'Branch',SettlementAmount:'SettlementAmount',
+                           MomoNumber:'Momo Number',
+                            ContactPhoneNumber:'Contact Number',Notes:'Notes',UserBranch:'TL Branch'}"
+                                filename =" 'refund-export' " separator="," class="css-class">
+                        <i class="fas fa-file-excel"> <strong>Disbursement Report</strong></i>
+                    </button></th>
+                </tr>
+                </thead>
+
+                <tbody><!--starting table body--->
+
+                <tr ng-repeat="detail in details| filter:search| orderBy:sortType:sortReverse track by $index" ><!---applying ng repeat to display sets of data in the api call---->
+                    <td>{{$index + 1}}</td>
+                    <td class="w3-left-align">{{detail.Id}}</td>
+                    <td class="w3-left-align" ng-if="info.showCreatedTime">{{detail.CreatedByDate|date:'longDate'}}</td>
+                    <td class="w3-left-align"  ng-if="info.showCreatedTime">{{detail.CreatedByDate|date:'shortTime'}}</td>
+                    <td class="w3-left-align"  ng-if="info.showStatusTime">{{detail.StatusByDate|date:'longDate'}}</td>
+                    <td class="w3-left-align"  ng-if="info.showStatusTime">{{detail.StatusByDate|date:'shortTime'}}</td>
+                    <td class="w3-left-align">{{detail.EmployeeID}}</td>
+                    <td class="w3-left-align">{{detail.ClientName}}</td>
+                    <td class="w3-left-align">{{detail.EmployerTypeId|employer_filter}}</td>
+                    <td class="w3-left-align">{{detail.PaymentMode}}</td>
+                    <td class="w3-left-align">{{detail.CreatedByUser}}</td>
+                    <td class="w3-left-align">{{detail.Branch}}</td>
+                    <td><button onclick="document.getElementById('modal').style.display='block'" ng-click="setSelected(detail);"
+                                type="button" class="btn btn-success">View</button>
+                    </td>
+                </tr><!--end of ng repeat---->
+                </tbody><!--end of table body--->
+            </table>
+            <div class="w3-center" ng-if="info.spin">
+
+                <br><br>
+                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                <span class="sr-only">Loading...</span>
+
+            </div>
+            <div class="w3-center">
+                <br>
+                <p ng-if="info.error">{{info.message}}</p>
+            </div>
+        </div>
+        <div class="w3-container"><!---modal container----->
+            <!---modal to display the currently selected row--->
+            <div id="modal" class="w3-modal">
+                <div class="w3-modal-content w3-card-4">
+                    <header class="w3-container w3-teal">
+                        <span onclick="document.getElementById('modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        <h2>{{info.modalTitle}}</h2>
+                    </header><!---header for the modal----->
+
+                    <div class="w3-container" id="table"><!--container to hold table to display the currently selected client data--->
+                        <!--<table class="w3-table-all">&lt;!&ndash;beginning of the table to diplay currently selected client data-&#45;&#45;&ndash;&gt;-->
+                            <!--<tbody>-->
+                            <!--<tr><td>STAFF ID: {{claim.EmployeeID}}</td><td>EMPLOYEE NAME: {{claim.ClientName}}</td></tr>-->
+                            <!--<tr><td>EMPLOYER: {{claim.EmployerName}}</td><td>PAYMENT METHOD: {{claim.PaymentMode}}</td></tr>-->
+                            <!--<tr><td>SETTLEMENT REASON: {{claim.Reason}}</td><td>SETTLEMENT AMOUNT: {{claim.SettlementAmount}}</td></tr>-->
+                            <!--<tr><td>SETTLEMENT MONTH: {{claim.SettlementMonth}}</td><td>SETTLEMENT YEAR: {{claim.SettlementYear}}</td></tr>-->
+                            <!--<tr><td>POSTED BY: {{claim.CreatedByUser}}</td><td>TL NAME: {{claim.TLCode}}</td></tr>-->
+                            <!--<tr><td>BRANCH: {{claim.Branch}}</td><td>ACCOUNT NUMBER: {{claim.AccountNumber}}</td></tr>-->
+                            <!--<tr><td>CONTACT NUMBER: {{claim.ContactPhoneNumber}}</td><td>PAYMENT NUMBER: {{claim.MomoNumber}}</td></tr>-->
+                            <!--<tr><td>MESSAGE: {{claim.Notes}}</td></tr>-->
+
+
+                            <!--</tbody>&lt;!&ndash;end of table body-&ndash;&gt;-->
+                        <!--</table>&lt;!&ndash;-end of table -&ndash;&gt;-->
+                        <!---->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <ul class="list-group">
+                                    <li class="list-group-item active">Refund Request</li>
+                                    <li class="list-group-item">STAFF ID: {{claim.EmployeeID}}</li>
+                                    <li class="list-group-item">EMPLOYEE NAME: {{claim.ClientName}}</li>
+                                    <li class="list-group-item">EMPLOYER: {{claim.EmployerName}}</li>
+                                    <li class="list-group-item">PAYMENT METHOD: {{claim.PaymentMode}}</li>
+                                    <li class="list-group-item">SETTLEMENT REASON: {{claim.Reason}}</li>
+                                    <li class="list-group-item">SETTLEMENT AMOUNT: {{claim.SettlementAmount}}</li>
+                                    <li class="list-group-item">SETTLEMENT MONTH: {{claim.SettlementMonth}}</li>
+                                    <li class="list-group-item">SETTLEMENT YEAR: {{claim.SettlementYear}}</li>
+                                    <li class="list-group-item">POSTED BY: {{claim.CreatedByUser}}</li>
+                                    <li class="list-group-item">CONTACT NUMBER: {{claim.ContactPhoneNumber}}</li>
+                                    <li class="list-group-item">PAYMENT NUMBER: {{claim.MomoNumber}}</li>
+                                    <li class="list-group-item">MESSAGE: {{claim.Notes}}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <nav-data-directive></nav-data-directive>
+                            </div>
+                            <div class="col-md-3">
+                                <finance-report-directive></finance-report-directive>
+                            </div>
+                            <div class="col-md-3">
+                                <report20-directive></report20-directive>
+                            </div>
+                        </div>
+
+
+                        <br>
+                        <footer class="w3-container w3-teal"><!---modal footer--->
+                            <div class="w3-right w3-margin" id="footer_button" ng-if="info.showButton">
+                                <button class="w3-btn w3-red"  type="button" onclick="document.getElementById('reject_form').style.display='block';
+                            document.getElementById('footer_button').style.display='none';">
+                                    REJECT
+                                </button>
+                                <button class="w3-btn w3-blue"  type="button" onclick="document.getElementById('approve_form').style.display='block';
+                            document.getElementById('footer_button').style.display='none';" ng-show="info.commentButton">
+                                    {{info.buttonText}}
+                                </button>
+                                <button  class="w3-btn w3-blue" type="button" ng-click="authorise()" ng-show="info.straightButton"> Approve</button>
+                            </div>
+
+                            <div class="w3-content" id="reject_form" style="display: none"><!--container to display the error message form--->
+                                <div class="w3-threequarter">
+                                    <form class="w3-container" ng-submit="reject()" name="rejectForm">
+                                        <div class="w3-container" id="error-text" >
+                                            <div class="w3-half w3-right w3-margin">
+
+                                                <textarea ng-model="info.reason" class="form-control" placeholder="Message" required></textarea>
+                                            </div>
+                                            <button class="w3-button w3-red w3-right w3-margin" type="submit" onclick="document.getElementById('modal').style.display='none'" ng-disabled="rejectForm.$invalid">REJECT</button>
+                                            <button class="w3-button w3-blue w3-right w3-margin"  type="button" onclick="document.getElementById('reject_form').style.display='none';document.getElementById('footer_button').style.display='block';">
+                                                BACK
+                                            </button>
+                                        </div>
+
+                                    </form><!--end of rejection form--->
+                                </div>
+                            </div><!--end of reject form --->
+
+                            <div class="w3-content" id="approve_form" style="display: none"><!--container to display the error message form--->
+                                <div class="w3-threequarter">
+                                    <form class="w3-container" ng-submit="authorise()" name="approveForm">
+                                        <div class="w3-container" id="approval-text" >
+                                            <div class="w3-half w3-right w3-margin">
+                                                <label>Tags</label>
+                                                <select ng-model="info.reason" class="form-control" required>
+                                                    <option ng-repeat="tag in info.tags" value="{{tag}}">{{tag}}</option>
+                                                </select>
+                                            </div>
+                                            <button class="w3-button w3-red w3-right w3-margin" type="submit" onclick="document.getElementById('modal').style.display='none'" ng-disabled="approveForm.$invalid">APPROVE</button>
+                                            <button class="w3-button w3-blue w3-right w3-margin"  type="button" onclick="document.getElementById('approve_form').style.display='none';document.getElementById('footer_button').style.display='block';">
+                                                BACK
+                                            </button>
+                                        </div>
+
+                                    </form><!--end of rejection form--->
+                                </div>
+                            </div><!--end of reject form --->
+
+                        </footer><!--end of modal footer-->
+                    </div><!---end of container--->
+
+                </div>
+            </div>
+        </div><!---end of pending qc container--->
+
+    </div>
+</div>

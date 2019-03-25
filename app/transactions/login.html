@@ -1,0 +1,28 @@
+<br/><br/><br/><br/>
+<div class="col-md-4 col-md-offset-4">
+    <div ng-controller="login_Ctrl">
+
+<div class="w3-card-4 w3-margin">
+        <header class="w3-container w3-teal w3-center">
+          <h2>FIL Management System</h2>
+        </header>
+      <form class="w3-container" ng-submit="login()">
+  <div class="input-group" style="margin: 16px 16px 25px 16px">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+    <input type="text" class="form-control" id="username" placeholder="Username" ng-model="username">
+  </div>
+  <div class="input-group" style="margin: 25px 16px 25px 16px">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="password">
+
+  </div>
+<p ng-if="error" style="color: red" class="w3-center">{{message}}</p>
+       <div class="w3-container w3-margin">
+           <button type="submit" class="w3-button w3-teal w3-block">LOGIN <i class="fa fa-circle-notch w3-spin" ng-if="signIn"></i></button>
+        </div>
+
+</form>
+</div>
+
+</div>
+</div>

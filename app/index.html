@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>FILMS</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <script src="bower_components/angular/angular.js"></script>
+  <link rel="icon" href="favicon.ico" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway:700" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+
+
+
+</head>
+<body>
+
+    <div class="w3-bar w3-teal">
+        <a  class="w3-bar-item w3-button"><img src="static/images/dalex_logo.png"></a>
+        <a class="w3-bar-item w3-button w3-right" ng-if="logged_in.showMenu" ng-cloak><span class="fas fa-user"></span> <strong>{{::logged_in.user}}</strong>, Last logged in {{logged_in.LastLogin}}</a>
+    </div>
+    <div zclass="w3-main" id="main">
+        <div class="w3-teal" ng-if="logged_in.showMenu" ng-cloak>
+            <i class="fas fa-bars fa-2x w3-margin w3-animate-fading-reynold" id="openNav" onclick="w3_open()"></i>
+            <i class="fas fa-bars fa-rotate-90 fa-2x w3-margin w3-animate-fading-reynold" id="closeNav" onclick="w3_close()" style="display: none"></i>
+            <div class="w3-dropdown-hover w3-right" style="margin-right: 7%">
+                <i class="fas fa-ellipsis-v fa-2x  w3-margin w3-animate-fading-reynold" aria-hidden="true"></i>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-left">
+                    <a ng-href="#!/landing" class="w3-bar-item w3-button w3-hover-teal"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+                    <!-- <a ng-href="#!/dashboard" class="w3-bar-item w3-button w3-hover-aqua" ng-if="logged_in.admin"><i class="fas fa-desktop" aria-hidden="true" ></i> Dashboard</a>-->
+                    <a ng-href="#!/settings" class="w3-bar-item w3-button w3-hover-teal"><i class="fas fa-filter" aria-hidden="true"></i> Preferences</a>
+                    <a ng-href="#!/statistics" class="w3-bar-item w3-button w3-hover-blue"><i class="fas fa-bar-chart" aria-hidden="true"></i> My Page</a>
+                    <a ng-href="#!/admin" class="w3-bar-item w3-button w3-hover-yellow" ng-if="logged_in.admin"><i class="fas fa-cog fa-spin"></i> Admin </a>
+                    <a ng-href="#!/logout" class="w3-bar-item w3-button w3-hover-red" onclick="w3_close()"><i class="fas fa-sign-out" aria-hidden="true"></i> Log Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div ng-view></div>
+    <div class="w3-bar w3-teal w3-center w3-animate-fading" style="position: fixed;bottom: 0">
+        <p>This Application is a property of Dalex finance and Leasing Company and by use of this application you have agreed to be in compliance with its policies</p>
+    </div>
+
+    <!------navigation---->
+    <div class="container-fluid">
+        <div class="w3-sidebar w3-bar-block w3-card-2 w3-animate-left" id="mySidebar" style="display:none">
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('KB_GPS')">KB/GPS AFFORD <i class="fas fa-caret-down"></i></button>
+        <div id="KB_GPS" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/pendingEligibility" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-user"></i> Pending KB/GPS Eligibility</a>
+            <a ng-href="#!/approvedEligibility" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-check"></i> Approved KB/GPS Eligibility</a>
+            <a ng-href="#!/rejectedEligibility" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-ban"></i> Rejected KB/GPS Eligibility</a>
+        </div>
+            <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('KYC')">KYC <i class="fas fa-caret-down"></i></button>
+        <div id="KYC" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/kyc" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-users"></i> KYC</a>
+            <a ng-href="#!/kyc_rejected" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-times-circle"></i> KYC Rejected</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('TPRS')">TPRS <i class="fas fa-caret-down"></i></button>
+        <div id="TPRS" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/tprs_pending" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-check"></i> TPRS Pending</a>
+            <a ng-href="#!/tprs_rejected" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-times-circle"></i> TPRS Rejected</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('EPAY')">E- PAYMENT <i class="fas fa-caret-down"></i></button>
+        <div id="EPAY" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/e-pay_pending" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-thumbs-o-up"></i> E-Pay Pending</a>
+            <a ng-href="#!/e-pay_rejected" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-times-circle"></i> Rejected Payments</a>
+            <a ng-href="#!/e-pay_confirmation" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-user-check"></i> Payment Confirmation</a>
+            <a ng-href="#!/paid_deals" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-money-bill"></i> Paid Deals</a>
+        </div>
+
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('LI')">LOAN ISSUE <i class="fas fa-caret-down"></i></button>
+        <div id="LI" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/postLoanIssues" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-paper-plane" aria-hidden="true"></i> Post Loan Issues</a>
+            <a ng-href="#!/pending_loan_issues" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-exclamation" aria-hidden="true"></i> Pending Loan Issues</a>
+            <a ng-href="#!/resolved_loan_issues" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-handshake" aria-hidden="true"></i> Resolved Loan Issues</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('REFUND')" ng-if="user_data.Role === 'LO' || user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD' || user_data.Role === 'REFUND'">REFUNDS <i class="fas fa-caret-down"></i></button>
+        <div id="REFUND" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/postRefund" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-paper-plane" aria-hidden="true"></i> Post Refund</a>
+            <a ng-href="#!/pendingRefunds" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-hand-holding-usd" aria-hidden="true"></i> Pending Refunds</a>
+            <a ng-href="#!/epayRefunds" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-user-check" aria-hidden="true"></i> Refunds Pending Payment</a>
+            <a ng-href="#!/paidRefunds" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-handshake" aria-hidden="true"></i> Paid Refunds</a>
+            <a ng-href="#!/rejectedRefunds" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-times-circle" aria-hidden="true"></i> Rejected Refunds</a>
+        </div>
+        <button class="w3-button w3-block w3-left-align" onclick="accordionFunc('SETTLEMENT')" ng-if="user_data.Role === 'LO' || user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD' || user_data.Role === 'REFUND'">SETTLEMENTS <i class="fas fa-caret-down"></i></button>
+        <div id="SETTLEMENT" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a ng-href="#!/settleLoan" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-credit-card" aria-hidden="true"></i> Settle a Loan</a>
+            <a ng-href="#!/pendingClearing" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-clock" aria-hidden="true"></i>Pending Settlements</a>
+            <a ng-href="#!/pendingClientAuthorisation" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-clock" aria-hidden="true"></i>Pending Client Authorisation</a>
+            <a ng-href="#!/tprsDeletions" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-eraser" aria-hidden="true" ng-if="user_data.Role === 'FIL-HEAD' || user_data.Role === 'ADMIN'"></i> TPRS Deletions</a>
+            <a ng-href="#!/deletedLoans" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-trash" aria-hidden="true"></i> Deleted Loans</a>
+        </div>
+
+
+            <hr>
+            <a ng-href="#!/selfieAudit" class="w3-bar-item w3-button w3-hover-teal"  onclick="w3_close()"><i class="fas fa-search" aria-hidden="true"></i> Search Selfie</a>
+            <a ng-href="#!/checkActiveLoans" class="w3-bar-item w3-button w3-hover-blue" onclick="w3_close()"><i class="fas fa-file-archive"></i> Check Active Loan</a>
+            <a ng-href="#!/cancelled_requests" class="w3-bar-item w3-button w3-hover-teal" onclick="w3_close()"><i class="fas fa-ban" aria-hidden="true"></i> Cancelled Requests</a>
+        </div>
+    </div>
+    <!---------navigation----->
+    <!-- All scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+    <script src="bower_components/file-saver/FileSaver.min.js"></script>
+    <script src="bower_components/ngPrint/ngPrint.js"></script>
+    <script src="bower_components/json-export-excel/dest/json-export-excel.min.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers/admin.js"></script>
+    <script src="controllers/landing.js"></script>
+    <script src="controllers/kyc.js"></script>
+    <script src="controllers/dashboard.js"></script>
+    <script src="controllers/cancelled_requests.js"></script>
+    <script src="controllers/login.js"></script>
+    <script src="controllers/paid_deals.js"></script>
+    <script src="controllers/pending_epay.js"></script>
+    <script src="controllers/epayConfirmation.js"></script>
+    <script src="controllers/pending_loan_issues.js"></script>
+    <script src="controllers/pending_tprs.js"></script>
+    <script src="controllers/rejected_e-pay.js"></script>
+    <script src="controllers/rejected_kyc.js"></script>
+    <script src="controllers/resolved_loan_issues.js"></script>
+    <script src="controllers/settings.js"></script>
+    <script src="controllers/test_me.js"></script>
+    <script src="controllers/tprs_rejected.js"></script>
+    <script src="controllers/statistics.js"></script>
+    <script src="controllers/pending_eligibility.js"></script>
+    <script src="controllers/approved_eligibility.js"></script>
+    <script src="controllers/rejected_eligibility.js"></script>
+    <script src="controllers/checkActiveLoans.js"></script>
+    <script src="controllers/postLoanIssues.js"></script>
+    <script src="reports/auditTrail.js"></script>
+    <script src="reports/getReplacement.js"></script>
+    <script src="controllers/tprsDeletions.js"></script>
+    <script src="controllers/individual_disbursements.js"></script>
+    <script src="reports/selfieAudit.js"></script>
+    <script src="controllers/settlements/bank.js"></script>
+    <script src="controllers/settlements/cheque.js"></script>
+    <script src="controllers/settlements/momo.js"></script>
+    <script src="controllers/settlements/pendingClearing.js"></script>
+    <script src="controllers/settlements/pendingClientAuthorisation.js"></script>
+    <script src="controllers/refundsV2/eligibilityCheck.js"></script>
+    <script src="controllers/refundsV2/refundsEpay.js"></script>
+    <script src="controllers/refundsV2/refundsKYC.js"></script>
+    <script src="controllers/refundsV2/refundsTPRS.js"></script>
+    <script src="controllers/refundsV2/refundsRequest.js"></script>
+    <script src="controllers/settlements/landing.js"></script>
+    <script src="controllers/refunds/pendingRefunds.js"></script>
+    <script src="controllers/refunds/epayRefunds.js"></script>
+    <script src="controllers/refunds/paid_refunds.js"></script>
+    <script src="controllers/refunds/rejectedRefunds.js"></script>
+    <script src="controllers/refunds/postRefund.js"></script>
+    <script src="reports/autoPost.js"></script>
+    <script src="reports/branchDisbursements.js"></script>
+    <script src="controllers/settlements/deletedLoans.js"></script>
+    <script src="controllers/logout.js"></script>
+    <script src="controllers/receipt/settlementReceipt.js"></script>
+    <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="bower_components/ngPrint/ngPrint.min.js"></script>
+    <script src="papaparse.min.js"></script>
+
+    <!-------->
+</body>
+</html>

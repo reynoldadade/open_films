@@ -1,0 +1,103 @@
+<div ng-controller="landing_Ctrl">
+
+    <div class="col-md-12">
+        <div class="w3-responsive w3-container">
+        <br>
+        <header class="w3-teal w3-padding w3-margin"><p>{{datenow|greetings}}, {{logged_in.user}}</p></header>
+
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="w3-card w3-center">
+                    <header class="w3-teal w3-padding">Affordability Check</header>
+                    <p>Check and Respond with Affordability for Police and Korlebu Clients</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/affordNav">Affordability</a>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="w3-card w3-center">
+                    <header class="w3-teal w3-padding">KYC</header>
+                    <p>Make calls, check client details, do quality check</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/kycNav">KYC</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">TPRS</header>
+                    <p>Confirm client details in TPRS</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/tprsNav">TPRS</a>
+
+                </div>
+            </div>
+            <div class="col-md-3" >
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">EPAY</header>
+                    <p>Confirm payment details and pay Client</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/epayNav">E-Payment</a>
+                                    </div>
+            </div>
+        </div>
+            <BR>
+        <div class="row">
+            <div  class="col-md-3">
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">Loan Issues</header>
+                    <p>Resolve Issues of Clients in Relation to Navision</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/loanIssuesNav">Loan Issues</a>
+
+                </div>
+            </div>
+            <div class="col-md-3" ng-if="user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD'">
+
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">AUDITS</header>
+                    <p>Get Selfie Attached to Deals, Do  an Audit Trail</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/selfieAudit">Get Selfies</a>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/auditTrail">Audit Trail</a>
+
+                    <!--<a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/dashboard">Go to Dashboard</a>-->
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">Reports</header>
+                    <p>View your details,generate your reports,change Password</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/reportsNav">Reports</a>
+
+                </div>
+
+            </div>
+            <div class="col-md-3" >
+                <div class="w3-card-4 w3-center">
+                    <header class="w3-teal w3-padding">Navision</header>
+                    <p>Check for active Loans</p>
+                    <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/checkActiveLoans">Go to Active Loans</a>
+                </div>
+
+            </div>
+        </div>
+            <BR>
+            <div class="row">
+                <div class="col-md-3" ng-if="user_data.Role === 'LO' || user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD' || user_data.Role === 'REFUND'">
+                    <div class="w3-card-4 w3-center">
+                        <header class="w3-teal w3-padding">Settlement</header>
+                        <p>Settle a Loan</p>
+                        <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/settlementNav">Go to Settlements</a>
+                    </div>
+
+                </div>
+                <div class="col-md-3" ng-if="user_data.Role === 'LO' || user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD' || user_data.Role === 'REFUND'">
+                    <div class="w3-card-4 w3-center">
+                        <header class="w3-teal w3-padding">Refunds</header>
+                        <p>Approve,Validate a Refund</p>
+                        <a class="w3-button w3-white w3-border w3-border-blue w3-margin w3-round-large" ng-href="#!/refundNav">Go to Refunds</a>
+                    </div>
+
+                </div>
+            </div>
+    </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,29 @@
+<div ng-controller="autoPost_Ctrl">
+    <alert-directive action="action"></alert-directive>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="w3-container">
+                <div class="w3-card">
+                    <div class="w3-teal w3-padding w3-bar">Replace Loans <div class="w3-right" ng-if="action.complete">
+                        <button class="btn btn-primary"
+                         ng-json-export-excel data="details"
+                         report-fields="{EmployeeId:'Employee Id',LoanNO:'Loan Number',Successful:'Successful?'}"
+                         filename =" 'posting-export' "
+                         separator=","
+                         class="css-class">
+                        <i class="fas fa-file-excel"> <strong>Posting Report</strong></i>
+                    </button></div> </div>
+
+                    <form ng-submit="submit()">
+                       <div class="form-group">
+                           <label class="w3-padding">Attach Excel File</label>
+                           <input type="file" class="form-control" id="replacementFile" accept=".csv">
+                       </div>
+                        <button class="btn btn-primary btn-block" type="submit">Submit</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
