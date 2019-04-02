@@ -9,6 +9,7 @@
                     <a class="list-group-item" ng-href="#!/e-pay_rejected">E-Payment Rejected</a>
                     <a class="list-group-item" ng-href="#!/paid_deals">View Paid Clients</a>
                     <a class="list-group-item" ng-href="#!/tl_disbursements">View a TLs Disbursements</a>
+                    <a class="list-group-item" ng-href="#!/manualWriteOff" ng-if="user_data.Role === 'ADMIN' || user_data.Role === 'FIL-HEAD'">Manually Settle a Loan</a>
                 </div>
             </div>
         </div>

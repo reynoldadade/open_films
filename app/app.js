@@ -54,6 +54,7 @@ var app = angular.module('myApp', [
   'myApp.refundsKYC',
   'myApp.refundsRequest',
   'myApp.refundsTPRS',
+  'myApp.manualWriteOff',
   'ngPrint'
 ]);
 
@@ -1230,6 +1231,17 @@ app.factory('apiFactory',['$http',function ($http) {
         return  $http({
             method: 'POST',
             url: ip+'/FilmsWeb/api/web/changechequetopaid',
+            params: input,
+            headers: {'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+    };
+
+    apiFactory.writeOffLoan = function (input) {
+        return $http({
+            method: 'GET',
+            url: ip+'FilmsWeb/api/payment/callbackget',
             params: input,
             headers: {'Content-Type': 'application/json',
                 'Accept': 'application/json'

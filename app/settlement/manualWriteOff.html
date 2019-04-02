@@ -1,0 +1,20 @@
+<div ng-controller="manualWriteOffCtrl">
+   <div class="col-md-12">
+       <alert-directive action="action" close-alerts="closeAlerts"></alert-directive>
+       <div class="col-md-4 col-md-offset-4" style="margin-top: 2%">
+           <div class="w3-card">
+               <header class="w3-teal w3-padding">Manual Write Off</header>
+               <div class="w3-container">
+                   <form ng-submit="writeOffLoan()">
+                       <div class="form-group">
+                           <label>Settlement Invoice Number</label>
+                           <input type="text" class="form-control" ng-model="invoiceNumber" placeholder="DLX#########" required>
+                       </div>
+                       <button class="w3-button w3-teal w3-block" type="submit">Write Off <i class="fa fa-circle-notch fa-spin" ng-show="spin"></i> </button>
+                       <br>
+                   </form>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
