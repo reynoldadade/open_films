@@ -155,6 +155,23 @@ app.config(['$routeProvider', function($routeProvider) {
 
                 }
         })
+        .when('/recoveryNav',{
+            templateUrl: 'navigations/recoveryNav.html',
+            controller:'landing_Ctrl',
+            resolve:
+                {
+                    mess:function($location,$sessionStorage)
+                    {
+                        var t=($sessionStorage.logged_in.allow).toString();
+                        if(t!=="true")
+                        {
+                            $location.path('/login');
+                            //redirectTo: '/login';
+                        }
+                    }
+
+                }
+        })
    }]);
 
 app.controller('landing_Ctrl',['$scope','$rootScope','$sessionStorage',function ($scope,$rootScope,$sessionStorage) {

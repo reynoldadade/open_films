@@ -45,7 +45,6 @@ app.controller('manualWriteOffCtrl', ['$scope','$sessionStorage','apiFactory','$
                     failure : false,
                     network: false
                 };
-                $location.path('/settleLoan');
 
             }else{
                 $sessionStorage.action={

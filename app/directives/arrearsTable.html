@@ -1,0 +1,123 @@
+<div class="w3-card">
+    <header class="w3-teal w3-padding">
+        <div class="row">
+            <div class="col-sm-10">
+                {{info.title}}
+            </div>
+
+            <div class="col-sm-2">
+                <div>
+                    <input class="form-control" placeholder="search" ng-model="search">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="card-body">
+        <div style="overflow:auto; height: 500px;">
+            <table class="table table-striped">
+                <thead class="thead">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Staff Id</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Date Contacted</th>
+                    <th scope="col">District</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Working?</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col">Preferred Payment</th>
+                    <th><button class="btn btn-success" ng-json-export-excel data="details"
+                                report-fields="{}" filename =" 'settlement_data' " separator="," class="css-class">
+                        <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                    </button></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="detail in details|filter:search|orderBy:sortType:sortReverse track by $index">
+                    <td>{{$index + 1}}</td>
+                    <td>{{detail.StaffId}}</td>
+                    <td>{{detail.ClientName}}</td>
+                    <td>{{detail.DateClientContacted}}</td>
+                    <td>{{detail.District}}</td>
+                    <td>{{detail.ClientCurrentStatus}}</td>
+                    <td>{{detail.IsClientworking}}</td>
+                    <td>{{detail.Actions}}</td>
+                    <td>{{detail.PaymentArrangement}}</td>
+                    <td><button class="btn btn-primary" onclick="document.getElementById('modal').style.display='block'" ng-click="setSelected(detail)">View</button> </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+            <div>
+                <br><br>
+                <span class="w3-center" ng-if="info.spin"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i> </span>
+                <div class="w3-center" ng-show="info.error">{{info.message}}</div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <div class="w3-container"><!---modal container----->
+        <!---modal to display the currently selected row--->
+        <div id="modal" class="w3-modal">
+            <div class="w3-modal-content w3-card-4">
+                <header class="w3-container w3-teal">
+                    <span onclick="document.getElementById('modal').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <h2>{{info.modalTitle}}</h2>
+                </header><!---header for the modal----->
+
+                <div class="w3-container" id="table"><!--container to hold table to display the currently selected client data--->
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td>STAFF ID: {{claim.StaffId}}</td><td>STAFF NAME: {{claim.ClientName}}</td>
+                        </tr>
+                        <tr>
+                            <td>DATE CONTACTED :{{claim.DateClientContacted}}</td><td>PHYSICAL ADDRESS: {{claim.PhysicalAddress}}</td>
+                        </tr>
+                        <tr>
+                            <td>REGION {{claim.District}}</td><td>REGION:{{claim.Region}}</td></tr>
+                        <tr>
+                            <td>CURRENT EMPLOYMENT: {{claim.CurrentEmployment}}</td><td>ACTIVE PHONE NUMBER: {{claim.ClientActivePhone}}</td>
+                        </tr>
+                        <tr >
+                            <td>IS CLIENT WORKING?: {{claim.IsClientworking}}</td><td>CLIENT REBOOK PASSWORD: {{claim.ClientRebookPassword}}</td>
+                        </tr>
+                        <tr >
+                            <td>AFFORDABILITY LOCKED?: {{claim.AffordabilityLocked}}</td><td >AFFORD AMOUNT:{{claim.AffordAmount}}</td>
+                        </tr>
+                        <tr>
+                            <td>PAYMENT ARRANGEMENT: {{claim.PaymentArrangement}}</td><td >AMOUNT: {{claim.Amount}}</td>
+                        </tr>
+                        <tr>
+                            <td>PAYMENT MODE: {{claim.ContactNumber}}</td><td>ACTIONS: {{claim.SettlementType}}</td>
+                        </tr>
+                        <tr>
+                            <td>OFFICER IN CHARGE: {{claim.RecoveryOfficer}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <br>
+                    <footer class="w3-container w3-teal"><!---modal footer--->
+                        <div class="w3-right w3-margin" id="footer_button" >
+
+                            <button class="w3-btn w3-orange" type="button" ng-click="editDetails()" onclick="document.getElementById('modal').style.display='none'">EDIT DATA</button>
+                        </div>
+
+                    </footer><!--end of modal footer-->
+                </div><!---end of container--->
+
+            </div>
+        </div>
+    </div><!---end of pending qc container--->
+</div>
+
+
+
+

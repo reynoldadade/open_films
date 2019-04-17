@@ -11,7 +11,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.controller('login_Ctrl',['$rootScope','$sessionStorage','$scope','$http','$location','updateStatus_factory',function ($rootScope,$sessionStorage,$scope,$http,$location,updateStatus_factory) {
 
-    updateStatus_factory.getIp({id: 1}).then(function (response) {
+    updateStatus_factory.getIp({id: 2}).then(function (response) {
         sessionStorage.setItem('ip',response.data.toString());
 
     });

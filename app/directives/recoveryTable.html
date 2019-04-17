@@ -1,82 +1,82 @@
 <div class="w3-card">
     <header class="w3-teal w3-padding">
-       <div class="row">
-           <div class="col-sm-2">
-               {{info.title}}
-           </div>
-           <div class="col-sm-8">
-               <form class="form-inline" ng-submit="submit()" ng-if="formStuff.showSubmit">
-                   <div class="form-group">
-                       <label>Start Date</label>
-                       <input type="date" class="form-control" ng-model="formStuff.start_date">
-                   </div>
-                   <div class="form-group">
-                       <label>End Date</label>
-                       <input type="date" class="form-control" ng-model="formStuff.end_date">
-                   </div>
-                   <button class="btn btn-primary" type="submit">Submit</button>
-               </form>
-           </div>
-           <div class="col-sm-2">
-               <div>
-                   <input class="form-control" placeholder="search" ng-model="search">
-               </div>
-           </div>
-       </div>
+        <div class="row">
+            <div class="col-sm-2">
+                {{info.title}}
+            </div>
+            <div class="col-sm-8">
+                <form class="form-inline" ng-submit="submit()" ng-if="formStuff.showSubmit">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" class="form-control" ng-model="formStuff.start_date">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" class="form-control" ng-model="formStuff.end_date">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="col-sm-2">
+                <div>
+                    <input class="form-control" placeholder="search" ng-model="search">
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="card-body">
         <div style="overflow:auto; height: 500px;">
-        <table class="table table-striped">
-            <thead class="thead">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Request Code</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Employee Id</th>
-                <th scope="col">Employee Name</th>
-                <th scope="col">Loan Number</th>
-                <th scope="col">Settlement Type</th>
-                <th scope="col">Settlement Amount</th>
-                <th><button class="btn btn-success" ng-json-export-excel data="details"
-              report-fields="{StatusDate:'Paid At',LoanNo:' Loan Number',LoanDate:'Loan Date',
+            <table class="table table-striped">
+                <thead class="thead">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Request Code</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Employee Id</th>
+                    <th scope="col">Employee Name</th>
+                    <th scope="col">Loan Number</th>
+                    <th scope="col">Settlement Type</th>
+                    <th scope="col">Settlement Amount</th>
+                    <th><button class="btn btn-success" ng-json-export-excel data="details"
+                                report-fields="{StatusDate:'Paid At',LoanNo:' Loan Number',LoanDate:'Loan Date',
               StaffId:'Client ID',CreatedDate:'Date Posted',SettlementType:'Settlement Type',
               StaffName:'ClientName',SettlementAmount:'Settlement Amount',SettlementTLCode:'TL Code',TLCode:'TL Name',Balance:'Balance',
               MonthlyInstallments:'Monthly Installments',ChequeAmount:'Cheque Amount',ChequeSortCode:'Sort Code',Status:'Status',
               PaymentMobileNumber:'Payment Number',ContactNumber:'Contact Number',InvoiceNo:'Invoice Number',
               tlPhoneNumber:'TLs Phone Number',Branch:'Branch', ChequeIssuerName: 'Cheque Issuer Name', ChequeBank :'Bank Name'
               }" filename =" 'settlement_data' " separator="," class="css-class">
-                    <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
-                </button></th>
-            </tr>
-            </thead>
+                        <i class="fas fa-file-excel"> <strong>Export to Excel</strong></i>
+                    </button></th>
+                </tr>
+                </thead>
 
-            <tbody>
-            <tr ng-repeat="detail in details|filter:search|orderBy:sortType:sortReverse track by $index">
-                <td>{{$index + 1}}</td>
-                <td>{{detail.Id}}</td>
-                <td>{{detail.RequestDate|date:'shortDate'}}</td>
-                <td>{{detail.RequestDate|date:'shortTime'}}</td>
-                <td>{{detail.StaffId}}</td>
-                <td>{{detail.StaffName}}</td>
-                <td>{{detail.LoanNo}}</td>
-                <td>{{detail.SettlementType}}</td>
-                <td>{{detail.SettlementAmount}}</td>
-                <td><button class="btn btn-primary" onclick="document.getElementById('modal').style.display='block'" ng-click="setSelected(detail)">View</button> </td>
+                <tbody>
+                <tr ng-repeat="detail in details|filter:search|orderBy:sortType:sortReverse track by $index">
+                    <td>{{$index + 1}}</td>
+                    <td>{{detail.Id}}</td>
+                    <td>{{detail.RequestDate|date:'shortDate'}}</td>
+                    <td>{{detail.RequestDate|date:'shortTime'}}</td>
+                    <td>{{detail.StaffId}}</td>
+                    <td>{{detail.StaffName}}</td>
+                    <td>{{detail.LoanNo}}</td>
+                    <td>{{detail.SettlementType}}</td>
+                    <td>{{detail.SettlementAmount}}</td>
+                    <td><button class="btn btn-primary" onclick="document.getElementById('modal').style.display='block'" ng-click="setSelected(detail)">View</button> </td>
 
-            </tr>
+                </tr>
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
             <div>
                 <br><br>
                 <span class="w3-center" ng-if="info.spin"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i> </span>
                 <div class="w3-center" ng-show="info.error">{{info.message}}</div>
             </div>
 
-    </div>
+        </div>
 
 
     </div>
@@ -120,7 +120,7 @@
                     </tr>
                     <tr><td>CONTACT NUMBER: {{claim.ContactNumber}}</td><td>SETTLEMENT TYPE: {{claim.SettlementType}}</td></tr>
                     <tr><td>GET RECEIPT: <a class="btn btn-link btn-primary" ng-href={{'http://197.221.85.146:6767/receipts/settlementReceipt/'+claim.InvoiceNo}} target="_blank">GET RECEIPT</a></td>
-                    <td>{{claim.InvoiceNo}}</td></tr>
+                        <td>{{claim.InvoiceNo}}</td></tr>
                     </tbody>
                 </table>
                 <br>

@@ -55,7 +55,10 @@ var app = angular.module('myApp', [
   'myApp.refundsRequest',
   'myApp.refundsTPRS',
   'myApp.manualWriteOff',
-  'ngPrint'
+  'ngPrint',
+    //recovery sections
+   'myApp.clientDetails',
+    'myApp.arrearsData'
 ]);
 
 app.config(['$locationProvider', '$routeProvider','$httpProvider', function($locationProvider, $routeProvider) {
@@ -252,6 +255,24 @@ app.directive('refundsTable', function() {
         }
     }
 });
+
+
+app.directive('arrearsTable', function () {
+    return {
+        restrict: 'E',
+        scope: {
+            info: '=',
+            editDetails: '=',
+            claim: '=',
+            details:'=',
+            setSelected:'='
+        },
+        templateUrl: 'directives/refundsTable.html',
+        link: function(scope, element) {
+
+        }
+    }
+})
 
 
 app.filter('role_filter',function(){
@@ -1157,6 +1178,17 @@ updateStatus_factory.getRefundByStatusDate = function (input) {
         })
     };
 
+    updateStatus_factory.getAllClientInformation = function () {
+        return $http({
+            method:'GET',
+            url: ip+'/FilmsWeb/api/loanrecovery/clientInformation',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+    };
+
 
 
 
@@ -1241,7 +1273,7 @@ app.factory('apiFactory',['$http',function ($http) {
     apiFactory.writeOffLoan = function (input) {
         return $http({
             method: 'GET',
-            url: ip+'FilmsWeb/api/payment/callbackget',
+            url: ip+'/FilmsWeb/api/payment/callbackget',
             params: input,
             headers: {'Content-Type': 'application/json',
                 'Accept': 'application/json'

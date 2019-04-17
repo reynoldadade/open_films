@@ -33,6 +33,5 @@
   },
   "dependencies": {
     "angular-chart.js": "^1.1.1",
-    "angular-datatables": "^4.1.1"
   }
 }

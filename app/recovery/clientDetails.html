@@ -1,0 +1,37 @@
+<div ng-controller="clientDetails_ctrl">
+    <div class="col-md-12">
+        <div class="col-md-12 col-md-offset-1">
+            <div class="w3-card">
+                <header class="w3-padding w3-teal">Client Details</header>
+                <div class="w3-row">
+                    <a href="javascript:void(0)" onclick="openAudit(event, 'view');">
+                        <div class="w3-half tablink w3-bottombar w3-hover-teal w3-padding ">View Client Data</div>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openAudit(event, 'edit');">
+                        <div class="w3-half tablink w3-bottombar w3-hover-teal w3-padding">Edit Client Data</div>
+                    </a>
+                </div>
+                 <!--for viewing-->
+                <div id="view" class="w3-container audit" style="display:block">
+
+                        sutff
+                    <!--<div style="overflow:auto; height: 500px;">-->
+                      <!---->
+                    <!--</div>-->
+
+                </div>
+                <!--for editing-->
+                <div id="edit" class="w3-container audit" style="display:none">
+
+                    <form ng-submit="editDetails()">
+
+                    </form>
+                    <!--<div style="overflow:auto; height: 500px;">-->
+                    <!---->
+                    <!--</div>-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
