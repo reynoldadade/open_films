@@ -515,8 +515,8 @@ app.filter('employer_filter', function () {
 
 var ip = 'http://'+ sessionStorage.getItem('ip') ;
 console.log(ip, 'this is ip')
-// var ip = 'http://10.0.6.246:6767'
-var test_ip = 'http://52.91.63.84';
+// var ip = ''
+var test_ip = '';
 
 //factories and services
 app.factory('updateStatus_factory',['$http',function ($http){
